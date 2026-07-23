@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="우리 아이 오늘 학교 쉬어도 되나요? 감염병 등교중지 출석인정 안내">
+<title>우리 아이 오늘 학교 쉬어도 되나요?</title>
+<style>
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --blue:#1D6FEB; --blue-d:#1558C8; --blue-bg:#EBF3FF; --blue-border:#C3D9FF;
+  --red:#C0392B;  --red-bg:#FEF0EF;  --red-border:#F9C9C6;
+  --amber:#B45309;--amber-bg:#FFF8EB;--amber-border:#FDE9A2;
+  --green:#16703C;--green-bg:#EDFAF2;--green-border:#A8EDCA;
+  --ink:#16191F; --ink-2:#3D4451; --ink-3:#6B7280;
+  --line:#DDE1E8; --line-2:#C8CDD6;
+  --bg:#F2F4F7; --card:#FFFFFF; --card-2:#F8F9FB;
+  --radius-lg:14px; --radius:10px; --radius-sm:7px;
+}
+body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:var(--bg); color:var(--ink); font-size:15px; line-height:1.55; min-height:100vh; }
+.app-header { background:var(--card); border-bottom:1px solid var(--line); padding:0 16px; position:sticky; top:0; z-index:100; }
+.header-top { display:flex; align-items:center; justify-content:space-between; padding:9px 0 8px; gap:10px; }
+.app-title { font-size:14px; font-weight:700; color:var(--ink); line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.child-badge { display:flex; align-items:center; gap:6px; cursor:pointer; flex-shrink:0; padding:5px 10px; border:1px solid var(--line); border-radius:20px; background:var(--card-2); transition:background .12s; position:relative; }
+.child-badge:hover { background:var(--bg); }
+.child-badge-name { font-size:12px; font-weight:600; color:var(--ink-2); white-space:nowrap; max-width:80px; overflow:hidden; text-overflow:ellipsis; }
+.child-badge-icon { font-size:14px; }
+.child-dropdown { display:none; position:absolute; right:0; top:calc(100% + 8px); background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px; width:260px; z-index:200; box-shadow:0 8px 24px rgba(0,0,0,.10); animation:fadeDown .15s ease; }
+.child-dropdown.open { display:block; }
+@keyframes fadeDown { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:none} }
+.dropdown-hint { font-size:12px; color:var(--ink-3); margin-bottom:12px; }
+.chip-field { margin-bottom:10px; }
+.chip-field label { display:block; font-size:11px; font-weight:700; color:var(--ink-2); margin-bottom:4px; letter-spacing:.03em; text-transform:uppercase; }
+.chip-field input { width:100%; padding:9px 11px; font-size:14px; border:1.5px solid var(--line); border-radius:var(--radius-sm); background:var(--card); color:var(--ink); outline:none; }
+.chip-field input:focus { border-color:var(--blue); }
+.chip-row { display:flex; gap:8px; }
+.chip-row .chip-field { flex:1; }
+.chip-save { width:100%; padding:10px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:700; cursor:pointer; transition:background .15s; }
+.chip-save:hover { background:var(--blue-d); }
+.tab-bar { display:flex; border-top:1px solid var(--line); }
+.tab-btn { flex:1; padding:10px 0; font-size:13px; font-weight:500; color:var(--ink-3); background:none; border:none; border-bottom:2.5px solid transparent; cursor:pointer; transition:all .15s; }
+.tab-btn.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:600; }
+.page { display:none; padding:16px; }
+.page.active { display:block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+.hero-search { margin-bottom:20px; }
+.hero-search-inner { background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg); padding:16px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+.hero-label { font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:10px; }
+.hero-wrap { position:relative; }
+.hero-wrap input { width:100%; padding:13px 14px 13px 44px; font-size:16px; font-weight:500; border:1.5px solid var(--line); border-radius:var(--radius); background:var(--card-2); color:var(--ink); outline:none; -webkit-appearance:none; transition:border-color .15s,background .15s; }
+.hero-wrap input:focus { border-color:var(--blue); background:var(--card); }
+.hero-ico { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:19px; pointer-events:none; }
+.hero-list { margin-top:10px; display:flex; flex-direction:column; gap:6px; }
+.hero-item { display:flex; align-items:center; justify-content:space-between; padding:11px 13px; background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius-sm); cursor:pointer; transition:all .12s; }
+.hero-item:hover { border-color:var(--blue); background:var(--blue-bg); }
+.hero-item-name { font-size:14px; font-weight:600; color:var(--ink); }
+.hero-item-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
+.hero-detail { background:var(--blue-bg); border:1.5px solid var(--blue-border); border-radius:var(--radius); padding:15px; margin-top:10px; animation:fadeIn .15s ease; }
+.hero-detail-name { font-size:13px; font-weight:700; color:var(--ink); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.hero-days { font-size:24px; font-weight:800; color:var(--ink); line-height:1.1; margin-bottom:2px; }
+.hero-days-sub { font-size:11px; color:var(--ink-3); margin-bottom:12px; }
+.hero-doc { font-size:12px; color:var(--ink-2); padding-top:10px; border-top:1px solid var(--blue-border); }
+.hero-note { font-size:12px; color:var(--red); margin-top:5px; font-weight:600; }
+.hero-actions { display:flex; gap:8px; margin-top:12px; }
+.hero-btn { flex:1; padding:11px 0; font-size:13px; font-weight:700; border-radius:var(--radius-sm); cursor:pointer; text-align:center; border:none; transition:all .12s; }
+.hero-btn-primary { background:var(--blue); color:#fff; }
+.hero-btn-primary:hover { background:var(--blue-d); }
+.hero-btn-secondary { background:var(--card); color:var(--blue); border:1.5px solid var(--blue-border); }
+.hero-btn-secondary:hover { background:var(--blue-bg); }
+.outbreak-banner { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; margin-bottom:16px; }
+.outbreak-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; }
+.outbreak-label { font-size:11px; font-weight:700; color:var(--ink-3); letter-spacing:.04em; text-transform:uppercase; }
+.outbreak-period { font-size:11px; color:var(--ink-3); }
+.outbreak-pills { display:flex; gap:6px; flex-wrap:wrap; }
+.outbreak-pill { padding:5px 11px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; background:var(--card-2); border:1px solid var(--line); color:var(--ink-2); transition:all .12s; }
+.outbreak-pill:hover { background:var(--blue-bg); border-color:var(--blue-border); color:var(--blue); }
+.outbreak-num { font-size:11px; font-weight:400; color:var(--ink-3); }
+.sit-section-label { font-size:11px; font-weight:700; letter-spacing:.05em; color:var(--ink-3); text-transform:uppercase; margin-bottom:10px; }
+.sit-card { display:flex; align-items:center; gap:13px; padding:14px; background:var(--card); border-radius:var(--radius); cursor:pointer; margin-bottom:8px; width:100%; text-align:left; transition:background .13s; border:none; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.sit-card:hover { background:var(--blue-bg); }
+.sit-card.active { background:var(--blue-bg); box-shadow:0 0 0 2px var(--blue); }
+.sit-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.sit-icon.red { background:var(--red-bg); }
+.sit-icon.amber { background:var(--amber-bg); }
+.sit-icon.green { background:var(--green-bg); }
+.sit-icon.gray  { background:var(--card-2); }
+.sit-chevron { color:var(--ink-3); font-size:18px; flex-shrink:0; margin-left:auto; }
+.sit-title { font-size:14px; font-weight:600; color:var(--ink); line-height:1.4; }
+.sit-desc { font-size:12px; color:var(--ink-3); margin-top:2px; line-height:1.4; }
+.result-panel { margin-top:16px; background:var(--card); border-radius:var(--radius-lg); overflow:hidden; animation:fadeIn .2s ease; box-shadow:0 2px 8px rgba(0,0,0,.07); }
+.result-head { padding:15px 16px 14px; border-bottom:1px solid var(--line); }
+.result-badge { display:inline-flex; align-items:center; font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; margin-bottom:7px; }
+.badge-red   { background:var(--red-bg);   color:var(--red);   border:1px solid var(--red-border); }
+.badge-amber { background:var(--amber-bg); color:var(--amber); border:1px solid var(--amber-border); }
+.badge-green { background:var(--green-bg); color:var(--green); border:1px solid var(--green-border); }
+.badge-blue  { background:var(--blue-bg);  color:var(--blue);  border:1px solid var(--blue-border); }
+.badge-gray  { background:var(--card-2);   color:var(--ink-2); border:1px solid var(--line); }
+.result-title { font-size:16px; font-weight:700; color:var(--ink); line-height:1.3; }
+.result-body { padding:14px 16px 16px; }
+.copy-btn-top { width:100%; margin-bottom:14px; padding:13px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:background .15s; }
+.copy-btn-top:hover { background:var(--blue-d); }
+.copy-btn-top:active { transform:scale(.98); }
+.copy-btn-top.copied { background:var(--green); }
+.section-toggle { display:flex; align-items:center; justify-content:space-between; padding:11px 0; cursor:pointer; border-bottom:1px solid var(--line); user-select:none; }
+.section-toggle-title { font-size:13px; font-weight:700; color:var(--ink-2); }
+.section-toggle-arrow { font-size:13px; color:var(--ink-3); transition:transform .2s; }
+.section-toggle-arrow.open { transform:rotate(180deg); }
+.section-collapsible { display:none; padding-top:12px; }
+.section-collapsible.open { display:block; animation:fadeIn .15s ease; }
+.todo-step { display:flex; align-items:flex-start; gap:11px; margin-bottom:12px; }
+.todo-step:last-child { margin-bottom:0; }
+.todo-num { width:24px; height:24px; border-radius:50%; background:var(--blue); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
+.todo-title-text { font-size:13px; font-weight:700; color:var(--ink); }
+.todo-sub { font-size:12px; color:var(--ink-3); margin-top:2px; line-height:1.45; }
+.info-row { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
+.info-row:last-of-type { border-bottom:none; }
+.info-lbl { font-size:11px; font-weight:700; color:var(--ink-3); min-width:74px; padding-top:2px; flex-shrink:0; text-transform:uppercase; letter-spacing:.03em; }
+.info-val { font-size:13px; color:var(--ink-2); line-height:1.55; flex:1; }
+.info-val.ok   { color:var(--green); font-weight:700; }
+.info-val.em   { color:var(--blue);  font-weight:600; }
+.info-val.warn { color:var(--red);   font-weight:600; }
+.notice-box { border-radius:var(--radius-sm); padding:10px 13px; margin:10px 0 4px; font-size:12px; line-height:1.6; }
+.notice-box.amber { background:var(--amber-bg); color:#7C4006; border:1px solid var(--amber-border); }
+.notice-box.red   { background:var(--red-bg);   color:#8B1A13; border:1px solid var(--red-border); }
+.notice-box.blue  { background:var(--blue-bg);  color:#1240A0; border:1px solid var(--blue-border); }
+.inline-search-box { background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px 13px; margin:4px 0 0; }
+.inline-search-label { font-size:11px; font-weight:700; color:var(--ink-2); margin-bottom:8px; text-transform:uppercase; letter-spacing:.03em; }
+.inline-search-wrap { position:relative; }
+.inline-search-wrap input { width:100%; padding:10px 12px 10px 34px; font-size:14px; border:1.5px solid var(--line); border-radius:var(--radius-sm); background:var(--card); color:var(--ink); outline:none; }
+.inline-search-wrap input:focus { border-color:var(--blue); }
+.inline-search-ico { position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:15px; color:var(--ink-3); pointer-events:none; }
+.inline-result { margin-top:8px; }
+.inline-dis-item { display:flex; align-items:center; justify-content:space-between; padding:9px 11px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius-sm); cursor:pointer; transition:all .12s; margin-bottom:5px; }
+.inline-dis-item:hover { border-color:var(--blue); background:var(--blue-bg); }
+.inline-dis-name { font-size:13px; font-weight:600; color:var(--ink); }
+.inline-dis-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
+.inline-detail { background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px 13px; margin-top:8px; animation:fadeIn .15s ease; }
+.inline-detail-name { font-size:12px; font-weight:700; color:var(--ink); margin-bottom:5px; }
+.inline-days { font-size:20px; font-weight:800; color:var(--ink); margin-bottom:3px; }
+.inline-days-sub { font-size:11px; color:var(--ink-3); }
+.inline-doc { font-size:12px; color:var(--ink-2); margin-top:8px; padding-top:8px; border-top:1px solid var(--line); }
+.checklist-box { margin-top:4px; }
+.check-item { display:flex; align-items:center; gap:12px; min-height:44px; padding:8px 0; cursor:pointer; border-bottom:1px solid var(--line); }
+.check-item:last-of-type { border-bottom:none; }
+.check-box { width:24px; height:24px; border:2px solid var(--line-2); border-radius:5px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px; transition:all .12s; background:var(--card); }
+.check-box.checked { background:var(--green); border-color:var(--green); color:#fff; }
+.check-label { font-size:13px; color:var(--ink-2); line-height:1.4; flex:1; }
+.check-feedback { font-size:12px; font-weight:600; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); display:none; }
+.check-feedback.warn { display:block; color:var(--red); }
+.check-feedback.ok   { display:block; color:var(--green); }
+.search-wrap { position:relative; margin-bottom:8px; }
+.search-wrap input { width:100%; padding:12px 14px 12px 40px; font-size:14px; border:1.5px solid var(--line); border-radius:var(--radius); background:var(--card); color:var(--ink); outline:none; -webkit-appearance:none; }
+.search-wrap input:focus { border-color:var(--blue); }
+.search-ico { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--ink-3); pointer-events:none; }
+.search-hint { font-size:12px; color:var(--ink-3); margin-bottom:12px; }
+.grade-filter { display:flex; gap:7px; margin-bottom:13px; flex-wrap:wrap; }
+.grade-btn { padding:6px 13px; font-size:12px; font-weight:500; border:1px solid var(--line); border-radius:20px; background:var(--card); color:var(--ink-3); cursor:pointer; transition:all .12s; }
+.grade-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
+.dis-list { display:flex; flex-direction:column; gap:6px; }
+.dis-item { display:flex; align-items:center; justify-content:space-between; padding:12px 13px; background:var(--card); border-radius:var(--radius-sm); cursor:pointer; transition:all .12s; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+.dis-item:hover,.dis-item.active { background:var(--blue-bg); box-shadow:0 0 0 1.5px var(--blue); }
+.dis-name { font-size:13px; font-weight:600; color:var(--ink); }
+.dis-alias { font-size:11px; color:var(--ink-3); margin-top:2px; }
+.dis-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
+.grade-tag { font-size:11px; font-weight:700; padding:3px 8px; border-radius:10px; flex-shrink:0; margin-left:8px; }
+.g1 { background:#F0F0F0; color:#3D4451; }
+.g2 { background:#F0F0F0; color:#3D4451; }
+.g3 { background:#F0F0F0; color:#3D4451; }
+.g4 { background:#F0F0F0; color:#3D4451; }
+.dis-detail { margin-top:12px; background:var(--card); border-radius:var(--radius); overflow:hidden; animation:fadeIn .2s ease; box-shadow:0 2px 8px rgba(0,0,0,.07); }
+.dis-detail-head { padding:13px 15px; background:var(--card-2); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.dis-detail-name { font-size:15px; font-weight:700; color:var(--ink); }
+.days-highlight { background:var(--blue-bg); border:1px solid var(--blue-border); border-radius:var(--radius-sm); padding:13px 14px; margin:13px 0 6px; }
+.days-label { font-size:11px; color:var(--blue); font-weight:700; margin-bottom:5px; text-transform:uppercase; letter-spacing:.04em; }
+.days-value { font-size:18px; font-weight:800; color:var(--ink); line-height:1.3; }
+.days-sub { font-size:11px; color:var(--ink-3); margin-top:3px; }
+.stats-hint { font-size:13px; color:var(--ink-3); line-height:1.6; margin-bottom:14px; }
+.filter-row { display:flex; gap:8px; margin-bottom:13px; }
+.filter-row select { flex:1; padding:9px 11px; font-size:13px; border:1.5px solid var(--line); border-radius:var(--radius-sm); background:var(--card); color:var(--ink); -webkit-appearance:none; outline:none; }
+.filter-row select:focus { border-color:var(--blue); }
+.fetch-btn { padding:9px 16px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; transition:background .15s; }
+.fetch-btn:hover { background:var(--blue-d); }
+.fetch-btn:disabled { background:var(--ink-3); cursor:default; }
+.loading { text-align:center; padding:32px 16px; color:var(--ink-3); font-size:13px; }
+.loading-spinner { width:24px; height:24px; border:3px solid var(--line); border-top-color:var(--blue); border-radius:50%; animation:spin .8s linear infinite; margin:0 auto 10px; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.top5-header { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
+.top5-title { font-size:15px; font-weight:700; color:var(--ink); }
+.top5-period { font-size:12px; color:var(--ink-3); }
+.stat-card { background:var(--card); border-radius:var(--radius); padding:14px 15px; margin-bottom:8px; cursor:pointer; transition:all .12s; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.stat-card:hover { background:var(--blue-bg); box-shadow:0 0 0 1.5px var(--blue); }
+.stat-rank-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.stat-rank { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; flex-shrink:0; background:var(--card-2); color:var(--ink-2); }
+.stat-rank.r1 { background:#FFF0CC; color:#7C4006; }
+.stat-disease { font-size:14px; font-weight:700; color:var(--ink); flex:1; }
+.stat-count { font-size:18px; font-weight:800; color:var(--blue); white-space:nowrap; }
+.stat-count-unit { font-size:12px; font-weight:400; color:var(--ink-3); margin-left:2px; }
+.stat-bar-wrap { background:var(--card-2); border-radius:4px; height:5px; margin:8px 0 7px; overflow:hidden; }
+.stat-bar { height:5px; border-radius:4px; background:var(--blue); }
+.stat-bottom { display:flex; justify-content:space-between; align-items:center; }
+.stat-days { font-size:12px; color:var(--ink-3); }
+.stat-detail-link { font-size:12px; color:var(--blue); font-weight:600; }
+.error-box { background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:13px 14px; font-size:13px; color:#7A1810; line-height:1.6; }
+.empty-state { text-align:center; padding:36px 16px; color:var(--ink-3); font-size:13px; line-height:1.7; }
+.source-note { margin-top:20px; font-size:11px; color:var(--ink-3); text-align:center; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="header-top">
+    <div class="app-title">🛡️ 우리 아이 오늘 학교 쉬어도 되나요?</div>
+    <div class="child-badge" id="child-badge" onclick="toggleDropdown()">
+      <span class="child-badge-icon">👶</span>
+      <span class="child-badge-name" id="badge-name">이름 입력</span>
+      <div class="child-dropdown" id="child-dropdown">
+        <div class="dropdown-hint">저장하면 문자 문구에 자동 반영됩니다.</div>
+        <div class="chip-field"><label>아이 이름</label><input type="text" id="input-name" placeholder="예: 김민준" maxlength="10"></div>
+        <div class="chip-row">
+          <div class="chip-field"><label>학년</label><input type="text" id="input-grade" placeholder="3" maxlength="2"></div>
+          <div class="chip-field"><label>반</label><input type="text" id="input-class" placeholder="2" maxlength="2"></div>
+        </div>
+        <button class="chip-save" onclick="event.stopPropagation();saveChildInfo()">저장</button>
+      </div>
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('situation')">상황별 안내</button>
+    <button class="tab-btn" onclick="switchTab('search')">전체 목록</button>
+    <button class="tab-btn" onclick="switchTab('stats')">요즘 유행</button>
+  </div>
+</div>
+
+<div class="page active" id="tab-situation">
+  <div class="hero-search">
+    <div class="hero-search-inner">
+      <div class="hero-label">병명을 바로 검색하세요</div>
+      <div class="hero-wrap">
+        <span class="hero-ico">🔍</span>
+        <input type="text" id="main-search-input" placeholder="수두, 독감, 장염, 눈병, 볼거리..." oninput="mainSearch()" onfocus="document.querySelector('.hero-search-inner').style.borderColor='var(--blue)'" onblur="if(!document.getElementById('main-search-result').innerHTML.trim())document.querySelector('.hero-search-inner').style.borderColor=''" autocomplete="off">
+      </div>
+      <div id="main-search-result"></div>
+    </div>
+  </div>
+  <div class="outbreak-banner" id="outbreak-banner" style="display:none">
+    <div class="outbreak-header">
+      <span class="outbreak-label">요즘 유행 중</span>
+      <span class="outbreak-period" id="outbreak-period"></span>
+    </div>
+    <div class="outbreak-pills" id="outbreak-pills"></div>
+  </div>
+  <div class="sit-section-label">또는 상황을 선택하세요</div>
+  <button class="sit-card" onclick="showResult('A',this)">
+    <div class="sit-icon red">🦠</div>
+    <div style="flex:1"><div class="sit-title">병원에서 감염병으로 진단받았어요</div><div class="sit-desc">수두, 독감, 수족구, 홍역, 결핵 등 의사에게 병명을 들은 경우</div></div>
+    <span class="sit-chevron">›</span>
+  </button>
+  <button class="sit-card" onclick="showResult('B',this)">
+    <div class="sit-icon amber">🩺</div>
+    <div style="flex:1"><div class="sit-title">전염될 수 있어서 쉬어야 한대요</div><div class="sit-desc">병명은 모르지만 전염성이 있으니 집에 있으라고 한 경우</div></div>
+    <span class="sit-chevron">›</span>
+  </button>
+  <button class="sit-card" onclick="showResult('C',this)">
+    <div class="sit-icon gray">⏳</div>
+    <div style="flex:1"><div class="sit-title">감염병 검사 중이에요</div><div class="sit-desc">감염병 의심으로 검사를 받았지만 결과를 기다리는 중</div></div>
+    <span class="sit-chevron">›</span>
+  </button>
+  <div id="result-area"></div>
+</div>
+
+<div class="page" id="tab-search">
+  <div class="search-wrap">
+    <span class="search-ico">🔍</span>
+    <input type="text" id="search-input" placeholder="병명 검색 — 독감, 장염, 눈병, 수두 등" oninput="filterDiseases()">
+  </div>
+  <p class="search-hint">일상 병명으로도 검색됩니다 (독감, 장염, 눈병, 볼거리, 뇌수막염 등)</p>
+  <div class="grade-filter">
+    <button class="grade-btn active" onclick="setGrade('all',this)">전체 (90종)</button>
+    <button class="grade-btn" onclick="setGrade('1',this)">1급</button>
+    <button class="grade-btn" onclick="setGrade('2',this)">2급</button>
+    <button class="grade-btn" onclick="setGrade('3',this)">3급</button>
+    <button class="grade-btn" onclick="setGrade('4',this)">4급</button>
+  </div>
+  <div class="dis-list" id="dis-list"></div>
+  <div id="dis-detail"></div>
+  <p class="source-note">※ 감염병예방법 2026.1.1. 기준 90종 · 법 개정 시 목록이 변경될 수 있습니다.</p>
+</div>
+
+<div class="page" id="tab-stats">
+  <p class="stats-hint">이번 달 전국에서 가장 많이 발생한 감염병 TOP 5입니다.<br>카드를 누르면 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</p>
+  <div class="filter-row">
+    <select id="stat-year"><option value="2026">2026년</option><option value="2025">2025년</option><option value="2024">2024년</option></select>
+    <select id="stat-month">
+      <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
+      <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
+      <option value="07">7월</option><option value="08">8월</option><option value="09">9월</option>
+      <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
+    </select>
+    <button class="fetch-btn" onclick="fetchStats()" id="fetch-btn">조회</button>
+  </div>
+  <div id="stats-result"><div class="empty-state">조회 버튼을 눌러주세요.</div></div>
+  <div class="source-note">출처: 질병관리청 전수신고 감염병 발생현황 (공공데이터포털)<br>전국 기준 · 의료기관 신고일 기준 집계 · 잠정통계</div>
+</div>
+
+<script>
+
+const API_KEY='9e644bbc9679873e697c8e70127dc6c6d1073968698887cef1fc34aba8e0a36c';
+
+/* 아이 정보 */
+let childInfo={name:'',grade:'',cls:''};
+function loadChildInfo(){try{const s=localStorage.getItem('childInfo');if(s)childInfo=JSON.parse(s);}catch(e){}}
+function saveChildInfo(){
+  const name=document.getElementById('input-name').value.trim();
+  const grade=document.getElementById('input-grade').value.trim();
+  const cls=document.getElementById('input-class').value.trim();
+  if(!name){alert('아이 이름을 입력해 주세요.');return;}
+  childInfo={name,grade,cls};
+  try{localStorage.setItem('childInfo',JSON.stringify(childInfo));}catch(e){}
+  closeDropdown();renderBadge();
+}
+function toggleDropdown(){
+  const dd=document.getElementById('child-dropdown');
+  if(dd.classList.contains('open')){closeDropdown();}
+  else{
+    document.getElementById('input-name').value=childInfo.name;
+    document.getElementById('input-grade').value=childInfo.grade;
+    document.getElementById('input-class').value=childInfo.cls;
+    dd.classList.add('open');
+  }
+}
+function closeDropdown(){document.getElementById('child-dropdown').classList.remove('open');}
+function renderBadge(){document.getElementById('badge-name').textContent=childInfo.name||'이름 입력';}
+function getChildLabel(){
+  if(!childInfo.name)return'[이름]';
+  const sub=[childInfo.grade?childInfo.grade+'학년':'',childInfo.cls?childInfo.cls+'반':''].filter(Boolean).join(' ');
+  return sub?`${childInfo.name} (${sub})`:childInfo.name;
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#child-badge')&&!e.target.closest('#child-dropdown'))closeDropdown();
+});
+function formatDate(d){return`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`;}
+function todayStr(){return formatDate(new Date());}
+function nextWeekStr(){const d=new Date();d.setDate(d.getDate()+7);return formatDate(d);}
+function esc(s){return s.replace(/['"()]/g,'_');}
+
+const DISEASES = [
+  /* 1급 (18종) */
+  {g:1,n:"에볼라바이러스병",     d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:"즉시 방역당국 신고 필요"},
+  {g:1,n:"마버그열",             d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:"즉시 방역당국 신고 필요"},
+  {g:1,n:"라싸열",               d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"크리미안콩고출혈열",   d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"남아메리카출혈열",     d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"리프트밸리열",         d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"두창",                 d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:"즉시 방역당국 신고 필요"},
+  {g:1,n:"페스트",               d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"탄저",                 d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"보툴리눔독소증",       d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"야토병",               d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"신종감염병증후군",     d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"중증급성호흡기증후군(SARS)", d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"중동호흡기증후군(MERS)", d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"동물인플루엔자 인체감염증", d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:""},
+  {g:1,n:"신종인플루엔자",       d:"해열 후 24시간 이상", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:1,n:"디프테리아",           d:"항생제 치료 후 24시간 이상 격리", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:1,n:"니파바이러스감염증",   d:"격리 해제 시까지 (방역당국 지시)", doc:"방역당국 확인서", note:"추가 지정 (2026.1.1.)"},
+
+  /* 2급 (21종) */
+  {g:2,n:"결핵",                 d:"전염성 소실 시까지 (의사소견 기준)", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"수두",                 d:"모든 수포에 딱지가 생길 때까지", doc:"진료확인서 또는 의사소견서", note:"학교 내 유행 잦음"},
+  {g:2,n:"홍역",                 d:"발진 후 5일까지", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"콜레라",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"장티푸스",             d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"파라티푸스",           d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"세균성이질",           d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"장출혈성대장균감염증", d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"A형간염",             d:"황달 발생 후 7일까지", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"백일해",               d:"항생제 치료 후 5일까지", doc:"진료확인서 또는 의사소견서", note:"영유아 위험도 높음"},
+  {g:2,n:"유행성이하선염(볼거리)", d:"이하선 종창 후 5일까지", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"풍진",                 d:"발진 후 7일까지", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"폴리오",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"수막구균 감염증",      d:"항생제 치료 후 24시간까지", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"b형헤모필루스인플루엔자", d:"항생제 치료 후 24시간까지", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"폐렴구균 감염증",      d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"한센병",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"성홍열",               d:"항생제 치료 후 24시간까지", doc:"진료확인서 또는 의사소견서", note:"학교 내 유행 잦음"},
+  {g:2,n:"반코마이신내성황색포도알균(VRSA)감염증", d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"카바페넴내성장내세균목(CRE)감염증", d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:2,n:"E형간염",             d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+
+  /* 3급 (28종) */
+  {g:3,n:"파상풍",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"B형간염",             d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"일본뇌염",             d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"C형간염",             d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"말라리아",             d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"레지오넬라증",         d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"비브리오패혈증",       d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"발진티푸스",           d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"발진열",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"쯔쯔가무시증",         d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"렙토스피라증",         d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"브루셀라증",           d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"공수병",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"신증후군출혈열",       d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"후천성면역결핍증(AIDS)", d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"크로이츠펠트-야콥병(CJD)", d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"황열",                 d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"뎅기열",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"큐열",                 d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"웨스트나일열",         d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"라임병",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"진드기매개뇌염",       d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"유비저",               d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"치쿤구니야열",         d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"중증열성혈소판감소증후군(SFTS)", d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"지카바이러스감염증",   d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"매독",                 d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+  {g:3,n:"임질",                 d:"의사소견서에 기재된 기간", doc:"진료확인서 또는 의사소견서", note:""},
+
+  /* 4급 (23종) */
+  {g:4,n:"인플루엔자(독감)",     d:"해열 후 48시간 (학교 등 집단시설)", doc:"진료확인서 또는 의사소견서", note:"학교 내 유행 잦음"},
+  {g:4,n:"회충증",               d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"편충증",               d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"요충증",               d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"간흡충증",             d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"폐흡충증",             d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"장흡충증",             d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"수족구병",             d:"의사소견서에 기재된 기간 (통상 발진·수포 소실까지)", doc:"의사소견서 (격리 필요 명시)", note:"학교 내 유행 잦음"},
+  {g:4,n:"임질",                 d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"클라미디아 감염증",    d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"연성하감",             d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"성기단순포진",         d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"첨규콘딜롬",           d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"반코마이신내성장알균(VRE)감염증", d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"메티실린내성황색포도알균(MRSA)감염증", d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"다제내성녹농균(MRPA)감염증", d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"다제내성아시네토박터바우마니균(MRAB)감염증", d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"장관감염증(노로바이러스 등)", d:"증상 소실 후 48시간", doc:"진료확인서 또는 의사소견서", note:"노로바이러스 포함"},
+  {g:4,n:"급성호흡기감염증",     d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"해외유입기생충감염증", d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"엔테로바이러스감염증", d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"사람유두종바이러스 감염증", d:"의사소견서에 기재된 기간", doc:"의사소견서", note:""},
+  {g:4,n:"Candida auris 감염증", d:"의사소견서에 기재된 기간", doc:"의사소견서", note:"2026.1.1. 신규 지정"},
+];
+/* TODOS not found */
+const TODOS={
+  A:[
+    {t:"병원에서 소견서 발급 요청",s:"진단명과 등교중지 기간(시작일~종료일)이 모두 적힌 서류"},
+    {t:"담임 선생님께 문자 발송",s:"위 문자 복사 버튼으로 보내세요"},
+    {t:"등교 재개 전날 소견서 제출",s:"서류 미비 시 출석인정 불가"},
+  ],
+  B:[
+    {t:"소견서에 두 가지 내용 확인",s:"① 전염성이 있음 + ② 등교중지 필요 — 둘 다 적혀야 출석인정"},
+    {t:"담임 선생님께 문자 발송",s:"위 문자 복사 버튼으로 보내세요"},
+    {t:"등교 재개 전날 소견서 제출",s:"두 조건 중 하나라도 빠지면 출석인정 불가"},
+  ],
+  C:[
+    {t:"진료확인서 즉시 발급",s:"미제출 시 질병결석으로 처리"},
+    {t:"담임 선생님께 문자 발송",s:"검사 결과 대기 중임을 알려주세요"},
+    {t:"결과 나오면 즉시 학교에 연락",s:"감염병이 아닌 경우 → 질병결석으로 전환"},
+  ],
+};
+const RESULTS = {
+  A: {
+    badge:"법정 감염병", badgeCls:"badge-red",
+    title:"출석 인정 가능 — 감염병 종류를 '검색' 탭에서 확인하세요",
+    rows:[
+      {lbl:"출석 인정", val:"✅ 가능 (모든 법정 감염병)", cls:"ok"},
+      {lbl:"등교중지 기간", val:"의사소견서에 적힌 기간이 원칙입니다.", cls:"em"},
+      {lbl:"필요 서류", val:"진단명 + 등교중지 기간이 명시된 진료확인서 / 의사소견서 / 진단서 중 1가지"},
+      {lbl:"주의", val:"서류에 진단명과 기간이 모두 기재되어야 합니다. 기간이 실제와 다르면 출석인정 불가.", cls:"warn"},
+    ],
+    notice:{cls:"yellow", txt:"📋 예시: '수두로 2026년 3월 1일~3월 7일 격리(등교중지)' 처럼 진단명과 기간이 모두 기재되어야 합니다."},
+    msg:"안녕하세요, 선생님. [학년] [반] [이름] 어머니/아버지입니다.\n[감염병명]으로 진단받아 [시작일]부터 [종료일]까지 등교중지 예정입니다.\n진단명과 등교중지 기간이 기재된 [소견서종류]를 제출하겠습니다."
+  },
+  B: {
+    badge:"비법정 감염병", badgeCls:"badge-yellow",
+    title:"출석 인정 가능 — 의사소견서 내용이 핵심",
+    rows:[
+      {lbl:"출석 인정", val:"✅ 가능 (비법정 감염병으로 인정)", cls:"ok"},
+      {lbl:"필수 조건", val:"소견서에 ① 전염성이 있음 + ② 등교중지(격리) 필요 — 두 가지 모두 명시되어야 합니다.", cls:"warn"},
+      {lbl:"등교중지 기간", val:"의사소견서에 기재된 기간 적용", cls:"em"},
+      {lbl:"필요 서류", val:"'전염성 있음' + '등교중지 필요' 내용이 포함된 의사소견서"},
+    ],
+    notice:{cls:"red", txt:"⚠️ 법정 감염병이 아니므로 소견서에 두 조건이 명시되지 않으면 출석인정이 되지 않습니다. 발급 전 반드시 의사에게 확인하세요."},
+    msg:"안녕하세요, 선생님. [학년] [반] [이름] 어머니/아버지입니다.\n법정 감염병은 아니지만 전염성이 있어 격리가 필요하다는 의사 소견을 받았습니다.\n[시작일]부터 [종료일]까지 등교중지 예정이며, 의사소견서를 제출하겠습니다."
+  },
+  C: {
+    badge:"감염병 검사 중", badgeCls:"badge-gray",
+    title:"결과 확인 전까지 출석 인정 — 단, 조건 있음",
+    rows:[
+      {lbl:"출석 인정", val:"✅ 조건부 가능", cls:"ok"},
+      {lbl:"인정 기간", val:"검사받은 날 ~ 결과 확인일까지", cls:"em"},
+      {lbl:"필요 서류", val:"진료확인서 (반드시 제출)"},
+      {lbl:"결과 후", val:"감염병이 아닌 경우 → 출석인정 취소, 질병결석으로 전환됩니다.", cls:"warn"},
+    ],
+    notice:{cls:"blue", txt:"📌 검사 결과가 나오는 즉시 학교에 알려주세요. 감염병이 아닌 것으로 확인되면 질병결석으로 처리가 변경됩니다."},
+    msg:"안녕하세요, 선생님. [학년] [반] [이름] 어머니/아버지입니다.\n감염병 의심 증상이 있어 검사 중입니다. 결과는 [예상일] 나올 예정입니다.\n결과 확인까지 등교중지 예정이며, 진료확인서를 제출하겠습니다.\n결과 확인 후 즉시 연락드리겠습니다."
+  }
+};
+
+function switchTab(id){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.classList.toggle('active',['situation','search','stats'][i]===id);});
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='search')renderList();
+  if(id==='stats')fetchStats();
+}
+
+
+/* 결과 패널 */
+let currentMsgType=null,currentMsgDisease=null;
+function showResult(type,el){
+  document.querySelectorAll('.sit-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  currentMsgType=type;currentMsgDisease=null;
+  const r=RESULTS[type],td=TODOS[type];
+  const rows=r.rows.map(row=>`<div class="info-row"><span class="info-lbl">${row.lbl}</span><span class="info-val ${row.cls||''}">${row.val}</span></div>`).join('');
+  const steps=td.map((s,i)=>`<div class="todo-step"><div class="todo-num">${i+1}</div><div><div class="todo-title-text">${s.t}</div><div class="todo-sub">${s.s}</div></div></div>`).join('');
+  const checks=r.checklist.map((c,i)=>`<div class="check-item" onclick="toggleCheck(this,'chk-${type}')"><div class="check-box"></div><div class="check-label">${c}</div></div>`).join('');
+  const inlineSearch=type==='A'?`<div class="inline-search-box"><div class="inline-search-label">진단받은 병명 검색</div><div class="inline-search-wrap"><span class="inline-search-ico">🔍</span><input type="text" id="inline-search-input" placeholder="수두, 독감, 수족구..." oninput="inlineSearch()" autocomplete="off"></div><div class="inline-result" id="inline-result"></div></div>`:'';
+  document.getElementById('result-area').innerHTML=`
+    <div class="result-panel">
+      <div class="result-head"><span class="result-badge ${r.badgeCls}">${r.badge}</span><div class="result-title">${r.title}</div></div>
+      <div class="result-body">
+        <button class="copy-btn-top" id="copy-btn-${type}" onclick="copyMsg('${type}')">✉️ 담임 선생님께 보낼 문자 복사</button>
+        ${inlineSearch}
+        <div class="section-toggle" onclick="toggleSection('todo-${type}','arrow-todo-${type}')"><span class="section-toggle-title">✅ 지금 해야 할 일 (3단계)</span><span class="section-toggle-arrow" id="arrow-todo-${type}">▼</span></div>
+        <div class="section-collapsible" id="todo-${type}"><div style="padding-bottom:12px">${steps}</div></div>
+        <div style="border-top:1px solid var(--line)">${rows}</div>
+        <div class="notice-box ${r.notice.cls}">${r.notice.txt}</div>
+        <div class="section-toggle" onclick="toggleSection('chk-${type}','arrow-chk-${type}')"><span class="section-toggle-title">📄 소견서 체크리스트</span><span class="section-toggle-arrow" id="arrow-chk-${type}">▼</span></div>
+        <div class="section-collapsible" id="chk-${type}"><div class="checklist-box">${checks}<div class="check-feedback" id="chk-fb-${type}"></div></div></div>
+      </div>
+    </div>`;
+  document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function toggleSection(id,arrowId){
+  const el=document.getElementById(id),arrow=document.getElementById(arrowId);
+  const isOpen=el.classList.contains('open');
+  el.classList.toggle('open',!isOpen);
+  if(arrow)arrow.classList.toggle('open',!isOpen);
+}
+function inlineSearch(){
+  const q=(document.getElementById('inline-search-input').value||'').trim();
+  const res=document.getElementById('inline-result');
+  currentMsgDisease=null;
+  if(!q){res.innerHTML='';return;}
+  const list=DISEASES.filter(d=>d.n.includes(q)||d.a.some(a=>a.includes(q)||q.includes(a))).slice(0,5);
+  if(!list.length){res.innerHTML=`<div style="font-size:12px;color:var(--ink-3);padding:8px 0">검색 결과가 없습니다.</div>`;return;}
+  res.innerHTML=list.map(d=>`<div class="inline-dis-item" onclick="showInlineDetail('${esc(d.n)}')"><div><div class="inline-dis-name">${d.n}</div><div class="inline-dis-period">${d.ds}</div></div><span class="grade-tag g${d.g}">${d.g}급</span></div>`).join('');
+}
+function showInlineDetail(escapedName){
+  const d=DISEASES.find(x=>esc(x.n)===escapedName);
+  if(!d)return;
+  currentMsgDisease=d;
+  document.getElementById('inline-search-input').value=d.n;
+  document.getElementById('inline-result').innerHTML=`<div class="inline-detail"><div class="inline-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="inline-days">${d.ds}</div><div class="inline-days-sub">${d.d}</div><div class="inline-doc">📄 필요 서류: ${d.doc}${d.note?'<br>⚠️ '+d.note:''}</div></div>`;
+}
+function toggleCheck(item,boxId){
+  const cb=item.querySelector('.check-box');
+  cb.classList.toggle('checked');
+  cb.textContent=cb.classList.contains('checked')?'✓':'';
+  const box=document.getElementById(boxId);
+  const total=box.querySelectorAll('.check-box').length;
+  const checked=box.querySelectorAll('.check-box.checked').length;
+  const fb=box.querySelector('.check-feedback');
+  fb.className='check-feedback';
+  if(checked===total){fb.classList.add('ok');fb.textContent='✅ 모두 확인! 소견서를 담임 선생님께 제출하세요.';}
+  else if(checked>0){fb.classList.add('warn');fb.textContent='⚠️ 체크되지 않은 항목이 있으면 출석인정이 안 될 수 있습니다.';}
+}
+function copyMsg(type){
+  const btn=document.getElementById('copy-btn-'+type);
+  let msg=RESULTS[type].getMsg();
+  if(currentMsgDisease&&type==='A'){msg=`안녕하세요, 선생님. ${getChildLabel()} 어머니/아버지입니다.\n${currentMsgDisease.n}으로 진단받아 오늘(${todayStr()})부터 [종료일]까지 등교중지 예정입니다.\n${currentMsgDisease.doc}을 제출하겠습니다.`;}
+  if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>{btn.textContent='✅ 복사 완료! [종료일] 수정 후 전송하세요';btn.classList.add('copied');setTimeout(()=>{btn.textContent='✉️ 담임 선생님께 보낼 문자 복사';btn.classList.remove('copied');},4000);});}
+  else{alert('복사할 내용:\n\n'+msg);}
+}
+
+
+/* 첫 화면 병명 검색 */
+let mainSelectedDisease=null;
+function mainSearch(){
+  const q=(document.getElementById('main-search-input').value||'').trim();
+  const res=document.getElementById('main-search-result');
+  mainSelectedDisease=null;
+  if(!q){res.innerHTML='';return;}
+  const list=DISEASES.filter(d=>d.n.includes(q)||d.a.some(a=>a.includes(q)||q.includes(a))).slice(0,6);
+  if(!list.length){res.innerHTML='<div style="font-size:12px;color:var(--ink-3);padding:8px 4px">검색 결과가 없습니다.</div>';return;}
+  res.innerHTML='<div class="hero-list">'+list.map(d=>`<div class="hero-item" onclick="showHeroDetail('${esc(d.n)}')"><div><div class="hero-item-name">${d.n}</div><div class="hero-item-period">${d.ds}</div></div><span class="grade-tag g${d.g}">${d.g}급</span></div>`).join('')+'</div>';
+}
+function showHeroDetail(escapedName){
+  const d=DISEASES.find(x=>esc(x.n)===escapedName);
+  if(!d)return;
+  mainSelectedDisease=d;
+  document.getElementById('main-search-input').value=d.n;
+  document.getElementById('main-search-result').innerHTML=`<div class="hero-detail"><div class="hero-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="hero-days">${d.ds}</div><div class="hero-days-sub">${d.d}</div><div class="hero-doc">📄 필요 서류: ${d.doc}</div>${d.note?'<div class="hero-note">⚠️ '+d.note+'</div>':''}<div class="hero-actions"><button class="hero-btn hero-btn-primary" onclick="applyDiseaseAndShowResult()">출석인정 안내 보기</button><button class="hero-btn hero-btn-secondary" onclick="copyMsgFromHero()">✉️ 문자 복사</button></div></div>`;
+}
+function applyDiseaseAndShowResult(){
+  if(!mainSelectedDisease)return;
+  const sitCards=document.querySelectorAll('.sit-card');
+  sitCards.forEach(c=>c.classList.remove('active'));
+  sitCards[0].classList.add('active');
+  showResult('A',sitCards[0]);
+  setTimeout(()=>{const input=document.getElementById('inline-search-input');if(input){input.value=mainSelectedDisease.n;showInlineDetail(esc(mainSelectedDisease.n));}document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'start'});},80);
+}
+function copyMsgFromHero(){
+  if(!mainSelectedDisease)return;
+  const d=mainSelectedDisease;
+  const msg=`안녕하세요, 선생님. ${getChildLabel()} 어머니/아버지입니다.\n${d.n}으로 진단받아 오늘(${todayStr()})부터 [종료일]까지 등교중지 예정입니다.\n${d.doc}을 제출하겠습니다.`;
+  if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>alert('복사되었습니다!\n[종료일]을 수정 후 전송하세요.'));}
+  else{alert('복사할 내용:\n\n'+msg);}
+}
+
+
+let currentGrade='all',selectedDisease=null;
+function setGrade(g,btn){currentGrade=g;document.querySelectorAll('.grade-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');selectedDisease=null;document.getElementById('dis-detail').innerHTML='';renderList();}
+function filterDiseases(){selectedDisease=null;document.getElementById('dis-detail').innerHTML='';renderList();}
+function renderList(){
+  const q=(document.getElementById('search-input').value||'').trim();
+  const list=DISEASES.filter(d=>{const gm=currentGrade==='all'||String(d.g)===currentGrade;const qm=!q||d.n.includes(q)||d.a.some(a=>a.includes(q)||q.includes(a));return gm&&qm;});
+  if(!list.length){document.getElementById('dis-list').innerHTML='<div class="empty-state">검색 결과가 없습니다.<br>다른 이름으로 검색해 보세요.</div>';return;}
+  document.getElementById('dis-list').innerHTML=list.map(d=>{const alias=d.a.length?`<div class="dis-alias">별칭: ${d.a.join(', ')}</div>`:'';return `<div class="dis-item ${selectedDisease===d.n?'active':''}" onclick="showDiseaseDetail('${esc(d.n)}')"><div><div class="dis-name">${d.n}</div>${alias}<div class="dis-period">${d.ds}</div></div><span class="grade-tag g${d.g}">${d.g}급</span></div>`;}).join('');
+}
+function showDiseaseDetail(escapedName){
+  const d=DISEASES.find(x=>esc(x.n)===escapedName);
+  if(!d)return;
+  selectedDisease=d.n;renderList();
+  const gradeDesc=['','생물테러·치명 감염병 (즉시 신고·음압격리)','24시간 이내 격리 필요','24시간 이내 신고','표본감시 감염병'];
+  const alias=d.a.length?`<div class="info-row"><span class="info-lbl">다른 이름</span><span class="info-val">${d.a.join(', ')}</span></div>`:'';
+  document.getElementById('dis-detail').innerHTML=`<div class="dis-detail"><div class="dis-detail-head"><div class="dis-detail-name">${d.n}</div><span class="grade-tag g${d.g}">${d.g}급</span></div><div class="result-body"><div class="days-highlight"><div class="days-label">등교중지 기간</div><div class="days-value">${d.ds}</div><div class="days-sub">${d.d}</div></div><div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val ok">✅ 가능 (법정 감염병)</span></div><div class="info-row"><span class="info-lbl">급 특성</span><span class="info-val">${gradeDesc[d.g]}</span></div>${alias}<div class="info-row"><span class="info-lbl">필요 서류</span><span class="info-val">${d.doc}</span></div>${d.note?`<div class="info-row"><span class="info-lbl">참고</span><span class="info-val warn">⚠️ ${d.note}</span></div>`:''}<div class="notice-box amber">📋 소견서에 반드시 <strong>진단명(${d.n})</strong>과 <strong>등교중지 기간</strong>이 함께 기재되어야 출석 인정이 됩니다.</div></div></div>`;
+  document.getElementById('dis-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+
+async function callStatsAPI(year,month){
+  const url=`https://apis.data.go.kr/1790387/infectdiseasestats/infectdiseasestatsservice/getInfectdiseaseStats?serviceKey=${encodeURIComponent(API_KEY)}&pageNo=1&numOfRows=100&resultType=json&year=${year}&month=${month}`;
+  const res=await fetch(url);if(!res.ok)throw new Error(`HTTP ${res.status}`);
+  const json=await res.json();const items=json?.response?.body?.items?.item||[];
+  return items.filter(it=>parseInt(it.cnt||0)>0).sort((a,b)=>parseInt(b.cnt||0)-parseInt(a.cnt||0));
+}
+async function loadOutbreakBanner(){
+  const now=new Date(),year=now.getFullYear(),month=String(now.getMonth()+1).padStart(2,'0');
+  try{
+    const top5=(await callStatsAPI(year,month)).slice(0,5);if(!top5.length)return;
+    document.getElementById('outbreak-period').textContent=`${year}년 ${parseInt(month)}월 · 전국`;
+    document.getElementById('outbreak-pills').innerHTML=top5.map(it=>{const dis=DISEASES.find(d=>d.n.includes(it.diseaseNm)||it.diseaseNm.includes(d.n));return `<span class="outbreak-pill" onclick="${dis?`goToDisease('${esc(dis.n)}')`:`switchTab('search')`}">${it.diseaseNm||'-'} <span class="outbreak-num">${Number(it.cnt).toLocaleString()}명</span></span>`;}).join('');
+    document.getElementById('outbreak-banner').style.display='block';
+  }catch(e){}
+}
+async function fetchStats(){
+  const year=document.getElementById('stat-year').value,month=document.getElementById('stat-month').value;
+  const btn=document.getElementById('fetch-btn');btn.disabled=true;btn.textContent='조회 중...';
+  document.getElementById('stats-result').innerHTML='<div class="loading"><div class="loading-spinner"></div>발생 현황을 불러오는 중입니다...</div>';
+  try{
+    const top5=(await callStatsAPI(year,month)).slice(0,5);
+    if(!top5.length){document.getElementById('stats-result').innerHTML='<div class="empty-state">해당 기간 발생 보고된 감염병이 없습니다.<br>연도·월을 변경해 보세요.</div>';return;}
+    const maxCnt=parseInt(top5[0].cnt||1);
+    const header=`<div class="top5-header"><div class="top5-title">이번 달 주의할 감염병 TOP 5</div><div class="top5-period">${year}년 ${parseInt(month)}월 · 전국</div></div>`;
+    const cards=top5.map((it,i)=>{const cnt=parseInt(it.cnt||0);const pct=Math.round(cnt/maxCnt*100);const dis=DISEASES.find(d=>d.n.includes(it.diseaseNm)||it.diseaseNm.includes(d.n));const badge=dis?`<span class="grade-tag g${dis.g}" style="margin-left:6px">${dis.g}급</span>`:'';const days=dis?`<span class="stat-days">🏠 ${dis.ds}</span>`:'<span class="stat-days">검색 탭에서 확인</span>';const link=dis?`<span class="stat-detail-link" onclick="event.stopPropagation();goToDisease('${esc(dis.n)}')">상세 보기 →</span>`:'';return `<div class="stat-card" onclick="${dis?`goToDisease('${esc(dis.n)}')`:''}"><div class="stat-rank-row"><div class="stat-rank${i===0?' r1':''}">${i+1}</div><div class="stat-disease">${it.diseaseNm||'-'}${badge}</div><div class="stat-count">${cnt.toLocaleString()}<span class="stat-count-unit">명</span></div></div><div class="stat-bar-wrap"><div class="stat-bar" style="width:${pct}%"></div></div><div class="stat-bottom">${days}${link}</div></div>`;}).join('');
+    const notice='<div class="notice-box blue" style="margin-top:4px">💡 카드를 누르면 해당 감염병의 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</div>';
+    document.getElementById('stats-result').innerHTML=header+cards+notice;
+  }catch(e){
+    document.getElementById('stats-result').innerHTML=`<div class="error-box"><strong>API 연결 실패</strong><br><br>브라우저 보안 정책(CORS)으로 인해 정적 웹페이지에서 직접 호출이 차단될 수 있습니다.<br><br>질병관리청 감염병포털(<a href="https://dportal.kdca.go.kr" target="_blank" rel="noopener">dportal.kdca.go.kr</a>)에서 직접 확인하세요.<br><br><em>오류: ${e.message}</em></div><div class="notice-box blue" style="margin-top:12px">💡 상황별 안내·감염병 검색은 인터넷 없이도 정상 작동합니다.</div>`;
+  }finally{btn.disabled=false;btn.textContent='조회';}
+}
+function goToDisease(escapedName){switchTab('search');setTimeout(()=>showDiseaseDetail(escapedName),80);}
+
+
+loadChildInfo();renderList();renderBadge();
+const _n=new Date(),_y=String(_n.getFullYear()),_m=String(_n.getMonth()+1).padStart(2,'0');
+for(let o of document.getElementById('stat-year').options){if(o.value===_y){o.selected=true;break;}}
+for(let o of document.getElementById('stat-month').options){if(o.value===_m){o.selected=true;break;}}
+loadOutbreakBanner();
+
+</script>
+</body>
+</html>
