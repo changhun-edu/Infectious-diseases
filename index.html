@@ -18,7 +18,9 @@
   --radius-lg:14px; --radius:10px; --radius-sm:7px;
 }
 body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif; background:var(--bg); color:var(--ink); font-size:15px; line-height:1.55; min-height:100vh; }
-.app-header { background:var(--card); border-bottom:1px solid var(--line); padding:0 16px; position:sticky; top:0; z-index:100; }
+.app-wrap { max-width:720px; margin:0 auto; }
+.app-header { background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:100; }
+.header-inner { max-width:720px; margin:0 auto; padding:0 16px; }
 .header-top { display:flex; align-items:center; justify-content:space-between; padding:9px 0 8px; gap:10px; }
 .app-title { font-size:14px; font-weight:700; color:var(--ink); line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .child-badge { display:flex; align-items:center; gap:6px; cursor:pointer; flex-shrink:0; padding:5px 10px; border:1px solid var(--line); border-radius:20px; background:var(--card-2); transition:background .12s; position:relative; }
@@ -35,18 +37,19 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .chip-field input:focus { border-color:var(--blue); }
 .chip-row { display:flex; gap:8px; }
 .chip-row .chip-field { flex:1; }
-.chip-save { width:100%; padding:10px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:700; cursor:pointer; transition:background .15s; }
+.chip-save { width:100%; padding:12px 16px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:700; cursor:pointer; transition:background .15s; }
 .chip-save:hover { background:var(--blue-d); }
 .tab-bar { display:flex; border-top:1px solid var(--line); }
 .tab-btn { flex:1; padding:10px 0; font-size:13px; font-weight:500; color:var(--ink-3); background:none; border:none; border-bottom:2.5px solid transparent; cursor:pointer; transition:all .15s; }
 .tab-btn.active { color:var(--blue); border-bottom-color:var(--blue); font-weight:600; }
 .page { display:none; padding:16px; }
+@media(min-width:600px){ .page { padding:24px 24px; } }
 .page.active { display:block; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
-.hero-search { margin-bottom:20px; }
+.hero-search { margin-bottom:24px; }
 .hero-search-inner { background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg); padding:16px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
 .hero-label { font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:10px; }
-.hero-wrap { position:relative; }
+.hero-wrap { position:relative; max-width:480px; }
 .hero-wrap input { width:100%; padding:13px 14px 13px 44px; font-size:16px; font-weight:500; border:1.5px solid var(--line); border-radius:var(--radius); background:var(--card-2); color:var(--ink); outline:none; -webkit-appearance:none; transition:border-color .15s,background .15s; }
 .hero-wrap input:focus { border-color:var(--blue); background:var(--card); }
 .hero-ico { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:19px; pointer-events:none; }
@@ -57,17 +60,17 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .hero-item-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
 .hero-detail { background:var(--blue-bg); border:1.5px solid var(--blue-border); border-radius:var(--radius); padding:15px; margin-top:10px; animation:fadeIn .15s ease; }
 .hero-detail-name { font-size:13px; font-weight:700; color:var(--ink); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
-.hero-days { font-size:24px; font-weight:800; color:var(--ink); line-height:1.1; margin-bottom:2px; }
+.hero-days { font-size:32px; font-weight:800; color:var(--blue); line-height:1.1; margin-bottom:2px; letter-spacing:-.02em; }
 .hero-days-sub { font-size:11px; color:var(--ink-3); margin-bottom:12px; }
 .hero-doc { font-size:12px; color:var(--ink-2); padding-top:10px; border-top:1px solid var(--blue-border); }
 .hero-note { font-size:12px; color:var(--red); margin-top:5px; font-weight:600; }
 .hero-actions { display:flex; gap:8px; margin-top:12px; }
-.hero-btn { flex:1; padding:11px 0; font-size:13px; font-weight:700; border-radius:var(--radius-sm); cursor:pointer; text-align:center; border:none; transition:all .12s; }
+.hero-btn { flex:1; padding:12px 0; font-size:13px; font-weight:700; border-radius:var(--radius-sm); cursor:pointer; text-align:center; border:none; transition:all .12s; }
 .hero-btn-primary { background:var(--blue); color:#fff; }
 .hero-btn-primary:hover { background:var(--blue-d); }
 .hero-btn-secondary { background:var(--card); color:var(--blue); border:1.5px solid var(--blue-border); }
 .hero-btn-secondary:hover { background:var(--blue-bg); }
-.outbreak-banner { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; margin-bottom:16px; }
+.outbreak-banner { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:12px 14px; margin-bottom:24px; }
 .outbreak-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; }
 .outbreak-label { font-size:11px; font-weight:700; color:var(--ink-3); letter-spacing:.04em; text-transform:uppercase; }
 .outbreak-period { font-size:11px; color:var(--ink-3); }
@@ -75,11 +78,11 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .outbreak-pill { padding:5px 11px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; background:var(--card-2); border:1px solid var(--line); color:var(--ink-2); transition:all .12s; }
 .outbreak-pill:hover { background:var(--blue-bg); border-color:var(--blue-border); color:var(--blue); }
 .outbreak-num { font-size:11px; font-weight:400; color:var(--ink-3); }
-.sit-section-label { font-size:11px; font-weight:700; letter-spacing:.05em; color:var(--ink-3); text-transform:uppercase; margin-bottom:10px; }
-.sit-card { display:flex; align-items:center; gap:13px; padding:14px; background:var(--card); border-radius:var(--radius); cursor:pointer; margin-bottom:8px; width:100%; text-align:left; transition:background .13s; border:none; box-shadow:0 1px 3px rgba(0,0,0,.06); }
+.sit-section-label { font-size:11px; font-weight:700; letter-spacing:.05em; color:var(--ink-3); text-transform:uppercase; margin-bottom:12px; }
+.sit-card { display:flex; align-items:center; gap:14px; padding:16px 14px; background:var(--card); border-radius:var(--radius); cursor:pointer; margin-bottom:10px; width:100%; text-align:left; transition:background .13s; border:none; box-shadow:0 1px 3px rgba(0,0,0,.06); }
 .sit-card:hover { background:var(--blue-bg); }
 .sit-card.active { background:var(--blue-bg); box-shadow:0 0 0 2px var(--blue); }
-.sit-icon { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+.sit-icon { width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
 .sit-icon.red { background:var(--red-bg); }
 .sit-icon.amber { background:var(--amber-bg); }
 .sit-icon.green { background:var(--green-bg); }
@@ -88,6 +91,10 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .sit-title { font-size:14px; font-weight:600; color:var(--ink); line-height:1.4; }
 .sit-desc { font-size:12px; color:var(--ink-3); margin-top:2px; line-height:1.4; }
 .result-panel { margin-top:16px; background:var(--card); border-radius:var(--radius-lg); overflow:hidden; animation:fadeIn .2s ease; box-shadow:0 2px 8px rgba(0,0,0,.07); }
+.result-stripe { height:4px; width:100%; border-radius:var(--radius-lg) var(--radius-lg) 0 0; }
+.result-stripe.stripe-red   { background:var(--red); }
+.result-stripe.stripe-amber { background:var(--amber); }
+.result-stripe.stripe-gray  { background:var(--line-2); }
 .result-head { padding:15px 16px 14px; border-bottom:1px solid var(--line); }
 .result-badge { display:inline-flex; align-items:center; font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; margin-bottom:7px; }
 .badge-red   { background:var(--red-bg);   color:var(--red);   border:1px solid var(--red-border); }
@@ -97,7 +104,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .badge-gray  { background:var(--card-2);   color:var(--ink-2); border:1px solid var(--line); }
 .result-title { font-size:16px; font-weight:700; color:var(--ink); line-height:1.3; }
 .result-body { padding:14px 16px 16px; }
-.copy-btn-top { width:100%; margin-bottom:14px; padding:13px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:background .15s; }
+.copy-btn-top { width:100%; margin-bottom:14px; padding:12px 16px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:background .15s; }
 .copy-btn-top:hover { background:var(--blue-d); }
 .copy-btn-top:active { transform:scale(.98); }
 .copy-btn-top.copied { background:var(--green); }
@@ -107,6 +114,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .section-toggle-arrow.open { transform:rotate(180deg); }
 .section-collapsible { display:none; padding-top:12px; }
 .section-collapsible.open { display:block; animation:fadeIn .15s ease; }
+.section-collapsible.default-open { display:block; }
 .todo-step { display:flex; align-items:flex-start; gap:11px; margin-bottom:12px; }
 .todo-step:last-child { margin-bottom:0; }
 .todo-num { width:24px; height:24px; border-radius:50%; background:var(--blue); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; }
@@ -114,7 +122,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .todo-sub { font-size:12px; color:var(--ink-3); margin-top:2px; line-height:1.45; }
 .info-row { display:flex; align-items:flex-start; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); }
 .info-row:last-of-type { border-bottom:none; }
-.info-lbl { font-size:11px; font-weight:700; color:var(--ink-3); min-width:74px; padding-top:2px; flex-shrink:0; text-transform:uppercase; letter-spacing:.03em; }
+.info-lbl { font-size:11px; font-weight:700; color:var(--ink-3); min-width:74px; padding-top:2px; flex-shrink:0; }
 .info-val { font-size:13px; color:var(--ink-2); line-height:1.55; flex:1; }
 .info-val.ok   { color:var(--green); font-weight:700; }
 .info-val.em   { color:var(--blue);  font-weight:600; }
@@ -136,7 +144,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .inline-dis-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
 .inline-detail { background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px 13px; margin-top:8px; animation:fadeIn .15s ease; }
 .inline-detail-name { font-size:12px; font-weight:700; color:var(--ink); margin-bottom:5px; }
-.inline-days { font-size:20px; font-weight:800; color:var(--ink); margin-bottom:3px; }
+.inline-days { font-size:28px; font-weight:800; color:var(--blue); line-height:1.1; margin-bottom:3px; letter-spacing:-.01em; }
 .inline-days-sub { font-size:11px; color:var(--ink-3); }
 .inline-doc { font-size:12px; color:var(--ink-2); margin-top:8px; padding-top:8px; border-top:1px solid var(--line); }
 .checklist-box { margin-top:4px; }
@@ -148,7 +156,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .check-feedback { font-size:12px; font-weight:600; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); display:none; }
 .check-feedback.warn { display:block; color:var(--red); }
 .check-feedback.ok   { display:block; color:var(--green); }
-.search-wrap { position:relative; margin-bottom:8px; }
+.search-wrap { position:relative; margin-bottom:8px; max-width:480px; }
 .search-wrap input { width:100%; padding:12px 14px 12px 40px; font-size:14px; border:1.5px solid var(--line); border-radius:var(--radius); background:var(--card); color:var(--ink); outline:none; -webkit-appearance:none; }
 .search-wrap input:focus { border-color:var(--blue); }
 .search-ico { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:16px; color:var(--ink-3); pointer-events:none; }
@@ -156,29 +164,30 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .grade-filter { display:flex; gap:7px; margin-bottom:13px; flex-wrap:wrap; }
 .grade-btn { padding:6px 13px; font-size:12px; font-weight:500; border:1px solid var(--line); border-radius:20px; background:var(--card); color:var(--ink-3); cursor:pointer; transition:all .12s; }
 .grade-btn.active { background:var(--blue); color:#fff; border-color:var(--blue); font-weight:700; }
-.dis-list { display:flex; flex-direction:column; gap:6px; }
+.dis-list { display:grid; grid-template-columns:1fr; gap:6px; }
+@media(min-width:600px){ .dis-list { grid-template-columns:1fr 1fr; } }
 .dis-item { display:flex; align-items:center; justify-content:space-between; padding:12px 13px; background:var(--card); border-radius:var(--radius-sm); cursor:pointer; transition:all .12s; box-shadow:0 1px 2px rgba(0,0,0,.04); }
 .dis-item:hover,.dis-item.active { background:var(--blue-bg); box-shadow:0 0 0 1.5px var(--blue); }
 .dis-name { font-size:13px; font-weight:600; color:var(--ink); }
 .dis-alias { font-size:11px; color:var(--ink-3); margin-top:2px; }
 .dis-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
 .grade-tag { font-size:11px; font-weight:700; padding:3px 8px; border-radius:10px; flex-shrink:0; margin-left:8px; }
-.g1 { background:#F0F0F0; color:#3D4451; }
-.g2 { background:#F0F0F0; color:#3D4451; }
-.g3 { background:#F0F0F0; color:#3D4451; }
-.g4 { background:#F0F0F0; color:#3D4451; }
+.g1 { background:#D4D6DA; color:#1A1D23; font-weight:800; }
+.g2 { background:#E0E2E6; color:#2E333D; font-weight:700; }
+.g3 { background:#EAECEF; color:#3D4451; font-weight:600; }
+.g4 { background:#F2F3F5; color:#6B7280; font-weight:500; }
 .dis-detail { margin-top:12px; background:var(--card); border-radius:var(--radius); overflow:hidden; animation:fadeIn .2s ease; box-shadow:0 2px 8px rgba(0,0,0,.07); }
 .dis-detail-head { padding:13px 15px; background:var(--card-2); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .dis-detail-name { font-size:15px; font-weight:700; color:var(--ink); }
 .days-highlight { background:var(--blue-bg); border:1px solid var(--blue-border); border-radius:var(--radius-sm); padding:13px 14px; margin:13px 0 6px; }
 .days-label { font-size:11px; color:var(--blue); font-weight:700; margin-bottom:5px; text-transform:uppercase; letter-spacing:.04em; }
-.days-value { font-size:18px; font-weight:800; color:var(--ink); line-height:1.3; }
+.days-value { font-size:32px; font-weight:800; color:var(--blue); line-height:1.1; letter-spacing:-.02em; }
 .days-sub { font-size:11px; color:var(--ink-3); margin-top:3px; }
 .stats-hint { font-size:13px; color:var(--ink-3); line-height:1.6; margin-bottom:14px; }
 .filter-row { display:flex; gap:8px; margin-bottom:13px; }
 .filter-row select { flex:1; padding:9px 11px; font-size:13px; border:1.5px solid var(--line); border-radius:var(--radius-sm); background:var(--card); color:var(--ink); -webkit-appearance:none; outline:none; }
 .filter-row select:focus { border-color:var(--blue); }
-.fetch-btn { padding:9px 16px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; transition:background .15s; }
+.fetch-btn { padding:12px 16px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap; transition:background .15s; }
 .fetch-btn:hover { background:var(--blue-d); }
 .fetch-btn:disabled { background:var(--ink-3); cursor:default; }
 .loading { text-align:center; padding:32px 16px; color:var(--ink-3); font-size:13px; }
@@ -203,11 +212,13 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .error-box { background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:13px 14px; font-size:13px; color:#7A1810; line-height:1.6; }
 .empty-state { text-align:center; padding:36px 16px; color:var(--ink-3); font-size:13px; line-height:1.7; }
 .source-note { margin-top:20px; font-size:11px; color:var(--ink-3); text-align:center; line-height:1.6; }
+.credit-note { margin-top:28px; font-size:10px; color:var(--line-2); text-align:right; padding-right:4px; letter-spacing:.03em; user-select:none; }
 </style>
 </head>
 <body>
 
 <div class="app-header">
+<div class="header-inner">
   <div class="header-top">
     <div class="app-title">🛡️ 우리 아이 오늘 학교 쉬어도 되나요?</div>
     <div class="child-badge" id="child-badge" onclick="toggleDropdown()">
@@ -229,8 +240,10 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
     <button class="tab-btn" onclick="switchTab('search')">전체 목록</button>
     <button class="tab-btn" onclick="switchTab('stats')">요즘 유행</button>
   </div>
-</div>
+</div><!-- /header-inner -->
+</div><!-- /app-header -->
 
+<div class="app-wrap">
 <div class="page active" id="tab-situation">
   <div class="hero-search">
     <div class="hero-search-inner">
@@ -266,6 +279,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
     <span class="sit-chevron">›</span>
   </button>
   <div id="result-area"></div>
+  <p class="credit-note">© 2026 최창훈</p>
 </div>
 
 <div class="page" id="tab-search">
@@ -503,12 +517,14 @@ const RESULTS = {
   }
 };
 
-function switchTab(id){
+function switchTab(id, pushState=true){
   document.querySelectorAll('.tab-btn').forEach((b,i)=>{b.classList.toggle('active',['situation','search','stats'][i]===id);});
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   if(id==='search')renderList();
   if(id==='stats')fetchStats();
+  /* URL 해시 없이 history state만 기록 */
+  if(pushState) history.pushState({tab:id}, '', location.pathname);
 }
 
 
@@ -525,12 +541,13 @@ function showResult(type,el){
   const inlineSearch=type==='A'?`<div class="inline-search-box"><div class="inline-search-label">진단받은 병명 검색</div><div class="inline-search-wrap"><span class="inline-search-ico">🔍</span><input type="text" id="inline-search-input" placeholder="수두, 독감, 수족구..." oninput="inlineSearch()" autocomplete="off"></div><div class="inline-result" id="inline-result"></div></div>`:'';
   document.getElementById('result-area').innerHTML=`
     <div class="result-panel">
+      <div class="result-stripe stripe-${type==='A'?'red':type==='B'?'amber':'gray'}"></div>
       <div class="result-head"><span class="result-badge ${r.badgeCls}">${r.badge}</span><div class="result-title">${r.title}</div></div>
       <div class="result-body">
         <button class="copy-btn-top" id="copy-btn-${type}" onclick="copyMsg('${type}')">✉️ 담임 선생님께 보낼 문자 복사</button>
         ${inlineSearch}
-        <div class="section-toggle" onclick="toggleSection('todo-${type}','arrow-todo-${type}')"><span class="section-toggle-title">✅ 지금 해야 할 일 (3단계)</span><span class="section-toggle-arrow" id="arrow-todo-${type}">▼</span></div>
-        <div class="section-collapsible" id="todo-${type}"><div style="padding-bottom:12px">${steps}</div></div>
+        <div class="section-toggle" onclick="toggleSection('todo-${type}','arrow-todo-${type}')"><span class="section-toggle-title">✅ 지금 해야 할 일 (3단계)</span><span class="section-toggle-arrow open" id="arrow-todo-${type}">▼</span></div>
+        <div class="section-collapsible default-open" id="todo-${type}"><div style="padding-bottom:12px">${steps}</div></div>
         <div style="border-top:1px solid var(--line)">${rows}</div>
         <div class="notice-box ${r.notice.cls}">${r.notice.txt}</div>
         <div class="section-toggle" onclick="toggleSection('chk-${type}','arrow-chk-${type}')"><span class="section-toggle-title">📄 소견서 체크리스트</span><span class="section-toggle-arrow" id="arrow-chk-${type}">▼</span></div>
@@ -685,12 +702,29 @@ async function fetchStats(){
 function goToDisease(escapedName){switchTab('search');setTimeout(()=>showDiseaseDetail(escapedName),80);}
 
 
+/* 뒤로가기 시 탭 복원 — 앱이 종료되지 않고 이전 탭으로 이동 */
+window.addEventListener('popstate', e => {
+  const tab = (e.state && e.state.tab) ? e.state.tab : 'situation';
+  switchTab(tab, false); /* pushState 없이 탭만 전환 */
+});
+/* 새로고침 시 흰 화면 방지 — beforeunload 없이 state 초기화 */
+window.addEventListener('pageshow', e => {
+  if(e.persisted){ /* 브라우저 캐시(bfcache)에서 복원된 경우 */
+    const tab = (history.state && history.state.tab) ? history.state.tab : 'situation';
+    switchTab(tab, false);
+  }
+});
 loadChildInfo();renderList();renderBadge();
 const _n=new Date(),_y=String(_n.getFullYear()),_m=String(_n.getMonth()+1).padStart(2,'0');
 for(let o of document.getElementById('stat-year').options){if(o.value===_y){o.selected=true;break;}}
 for(let o of document.getElementById('stat-month').options){if(o.value===_m){o.selected=true;break;}}
+/* 초기 진입 — URL 변경 없이 현재 탭을 history에 기록 */
+if(!history.state || !history.state.tab){
+  history.replaceState({tab:'situation'}, '', location.pathname);
+}
 loadOutbreakBanner();
 
 </script>
+</div><!-- /app-wrap -->
 </body>
 </html>
