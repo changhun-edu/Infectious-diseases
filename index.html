@@ -26,7 +26,8 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .app-title { font-size:15px; font-weight:700; color:var(--ink); line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .app-subtitle { font-size:11px; color:var(--ink-3); line-height:1.3; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .child-wrap { position:relative; flex-shrink:0; }
-.child-badge { display:flex; align-items:center; gap:6px; cursor:pointer; padding:5px 10px; border:1px solid var(--line); border-radius:20px; background:var(--card-2); transition:background .12s; }
+.child-badge.empty::after { content:""; position:absolute; top:2px; right:2px; width:7px; height:7px; background:var(--blue); border-radius:50%; border:1.5px solid var(--card); }
+.child-badge { position:relative; display:flex; align-items:center; gap:6px; cursor:pointer; padding:5px 10px; border:1px solid var(--line); border-radius:20px; background:var(--card-2); transition:background .12s; }
 .child-badge:hover { background:var(--bg); }
 .child-badge-name { font-size:12px; font-weight:600; color:var(--ink-2); white-space:nowrap; max-width:80px; overflow:hidden; text-overflow:ellipsis; }
 .child-badge-icon { font-size:14px; }
@@ -51,21 +52,27 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
 .hero-search { margin-bottom:24px; }
 .hero-search-inner { background:var(--card); border:2px solid var(--blue-border); border-radius:var(--radius-lg); padding:16px; box-shadow:0 2px 10px rgba(29,111,235,.08); transition:border-color .15s; }
-.hero-label { font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:10px; }
 .hero-wrap { position:relative; max-width:480px; }
 .hero-wrap input { width:100%; padding:13px 14px 13px 44px; font-size:16px; font-weight:500; border:1.5px solid var(--line); border-radius:var(--radius); background:var(--card-2); color:var(--ink); outline:none; -webkit-appearance:none; transition:border-color .15s,background .15s; }
 .hero-wrap input:focus { border-color:var(--blue); background:var(--card); }
 .hero-ico { position:absolute; left:13px; top:50%; transform:translateY(-50%); font-size:19px; pointer-events:none; }
+.recent-box { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:11px; padding-top:11px; border-top:1px solid var(--line); }
+.recent-label { font-size:11px; color:var(--ink-3); font-weight:600; margin-right:2px; }
+.recent-pill { padding:4px 10px; border-radius:20px; font-size:12px; font-weight:600; background:var(--card-2); border:1px solid var(--line); color:var(--ink-2); cursor:pointer; transition:all .12s; }
+.recent-pill:hover { background:var(--blue-bg); border-color:var(--blue-border); color:var(--blue); }
 .hero-list { margin-top:10px; display:flex; flex-direction:column; gap:6px; }
 .hero-item { display:flex; align-items:center; justify-content:space-between; padding:11px 13px; background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius-sm); cursor:pointer; transition:all .12s; }
 .hero-item:hover { border-color:var(--blue); background:var(--blue-bg); }
 .hero-item-name { font-size:14px; font-weight:600; color:var(--ink); }
 .hero-item-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
-.hero-detail { background:var(--blue-bg); border:1.5px solid var(--blue-border); border-radius:var(--radius); padding:15px; margin-top:10px; animation:fadeIn .15s ease; }
+.hero-detail { background:var(--card); border:1px solid var(--line); border-left:4px solid var(--blue); border-radius:var(--radius); padding:15px; margin-top:10px; animation:fadeIn .15s ease; }
 .hero-detail-name { font-size:13px; font-weight:700; color:var(--ink); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
 .hero-days { font-size:32px; font-weight:800; color:var(--blue); line-height:1.1; margin-bottom:2px; letter-spacing:-.02em; }
 .hero-days-sub { font-size:11px; color:var(--ink-3); margin-bottom:12px; }
-.hero-doc { font-size:12px; color:var(--ink-2); padding-top:10px; border-top:1px solid var(--blue-border); }
+.hero-return { background:var(--blue-bg); border:1px solid var(--blue-border); border-radius:var(--radius-sm); padding:11px 13px; margin:12px 0; font-size:13px; color:var(--ink-2); line-height:1.5; }
+.hero-return strong { font-weight:800; font-size:15px; color:var(--blue); }
+.hero-return-note { font-size:11px; color:var(--ink-3); margin-top:4px; font-weight:400; }
+.hero-doc { font-size:12px; color:var(--ink-2); padding-top:10px; border-top:1px solid var(--line); }
 .hero-note { font-size:12px; color:var(--red); margin-top:5px; font-weight:600; }
 .hero-actions { display:flex; gap:8px; margin-top:12px; }
 .hero-btn { flex:1; padding:12px 0; font-size:13px; font-weight:700; border-radius:var(--radius-sm); cursor:pointer; text-align:center; border:none; transition:all .12s; }
@@ -107,6 +114,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .badge-gray  { background:var(--card-2);   color:var(--ink-2); border:1px solid var(--line); }
 .result-title { font-size:16px; font-weight:700; color:var(--ink); line-height:1.3; }
 .result-body { padding:14px 16px 16px; }
+.info-block { margin-top:12px; border-top:1px solid var(--line); }
 .msg-box { background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius); padding:13px 14px; margin-bottom:14px; }
 .msg-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; }
 .msg-label { font-size:12px; font-weight:700; color:var(--ink-2); }
@@ -119,10 +127,6 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .msg-copy-btn:hover { background:var(--blue-d); }
 .msg-copy-btn:active { transform:scale(.98); }
 .msg-copy-btn.copied { background:var(--green); }
-.copy-btn-top { width:100%; margin-bottom:14px; padding:12px 16px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:background .15s; }
-.copy-btn-top:hover { background:var(--blue-d); }
-.copy-btn-top:active { transform:scale(.98); }
-.copy-btn-top.copied { background:var(--green); }
 .section-toggle { display:flex; align-items:center; justify-content:space-between; padding:11px 0; cursor:pointer; border-bottom:1px solid var(--line); user-select:none; }
 .section-toggle-title { font-size:13px; font-weight:700; color:var(--ink-2); }
 .section-toggle-arrow { font-size:13px; color:var(--ink-3); transition:transform .2s; }
@@ -184,6 +188,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .dis-item { display:flex; align-items:center; justify-content:space-between; padding:12px 13px; background:var(--card); border-radius:var(--radius-sm); cursor:pointer; transition:all .12s; box-shadow:0 1px 2px rgba(0,0,0,.04); }
 .dis-item:hover,.dis-item.active { background:var(--blue-bg); box-shadow:0 0 0 1.5px var(--blue); }
 .dis-name { font-size:13px; font-weight:600; color:var(--ink); }
+.dis-common { display:inline-block; font-size:10px; font-weight:700; color:var(--blue); background:var(--blue-bg); border:1px solid var(--blue-border); border-radius:9px; padding:1px 6px; margin-left:6px; vertical-align:middle; }
 .dis-alias { font-size:11px; color:var(--ink-3); margin-top:2px; }
 .dis-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
 .grade-tag { font-size:11px; font-weight:700; padding:3px 8px; border-radius:10px; flex-shrink:0; margin-left:8px; }
@@ -194,8 +199,8 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .dis-detail { margin-top:12px; background:var(--card); border-radius:var(--radius); overflow:hidden; animation:fadeIn .2s ease; box-shadow:0 2px 8px rgba(0,0,0,.07); }
 .dis-detail-head { padding:13px 15px; background:var(--card-2); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .dis-detail-name { font-size:15px; font-weight:700; color:var(--ink); }
-.days-highlight { background:var(--blue-bg); border:1px solid var(--blue-border); border-radius:var(--radius-sm); padding:13px 14px; margin:13px 0 6px; }
-.days-label { font-size:11px; color:var(--blue); font-weight:700; margin-bottom:5px; text-transform:uppercase; letter-spacing:.04em; }
+.days-highlight { background:var(--card-2); border:1px solid var(--line); border-left:4px solid var(--blue); border-radius:var(--radius-sm); padding:13px 14px; margin:13px 0 0; }
+.days-label { font-size:11px; color:var(--ink-3); font-weight:700; margin-bottom:5px; }
 .days-value { font-size:32px; font-weight:800; color:var(--blue); line-height:1.1; letter-spacing:-.02em; }
 .days-sub { font-size:11px; color:var(--ink-3); margin-top:3px; }
 .season-box { background:var(--card); border:1px solid var(--line); border-left:4px solid var(--amber); border-radius:var(--radius); padding:14px; margin-bottom:16px; }
@@ -279,6 +284,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
         <input type="text" id="main-search-input" placeholder="수두, 독감, 장염, 눈병, 볼거리..." oninput="mainSearch()" onfocus="document.querySelector('.hero-search-inner').style.borderColor='var(--blue)'" onblur="document.querySelector('.hero-search-inner').style.borderColor=''" autocomplete="off">
       </div>
       <div id="main-search-result"></div>
+      <div class="recent-box" id="recent-box" style="display:none"></div>
     </div>
   </div>
   <div class="outbreak-banner" id="outbreak-banner" style="display:none">
@@ -370,7 +376,11 @@ function toggleDropdown(){
   }
 }
 function closeDropdown(){document.getElementById('child-dropdown').classList.remove('open');}
-function renderBadge(){document.getElementById('badge-name').textContent=childInfo.name||'이름 입력';}
+function renderBadge(){
+  document.getElementById('badge-name').textContent=childInfo.name||'이름 입력';
+  const b=document.getElementById('child-badge');
+  if(b) b.classList.toggle('empty', !childInfo.name);
+}
 function getChildLabel(){
   if(!childInfo.name)return'[이름]';
   const sub=[childInfo.grade?childInfo.grade+'학년':'',childInfo.cls?childInfo.cls+'반':''].filter(Boolean).join(' ');
@@ -595,22 +605,22 @@ function showResult(type,el){
       <div class="result-stripe stripe-${type==='A'?'red':type==='B'?'amber':'gray'}"></div>
       <div class="result-head"><span class="result-badge ${r.badgeCls}">${r.badge}</span><div class="result-title">${r.title}</div></div>
       <div class="result-body">
+        ${inlineSearch}
+        <div class="${inlineSearch?'info-block':''}">${rows}</div>
+        <div class="notice-box ${r.notice.cls}">${r.notice.txt}</div>
+        <div class="section-toggle" onclick="toggleSection('chk-${type}','arrow-chk-${type}')"><span class="section-toggle-title">📄 소견서 체크리스트</span><span class="section-toggle-arrow open" id="arrow-chk-${type}">▼</span></div>
+        <div class="section-collapsible default-open" id="chk-${type}"><div class="checklist-box">${checks}<div class="check-feedback" id="chk-fb-${type}"></div></div></div>
+        <div class="section-toggle" onclick="toggleSection('todo-${type}','arrow-todo-${type}')"><span class="section-toggle-title">✅ 지금 해야 할 일 (3단계)</span><span class="section-toggle-arrow" id="arrow-todo-${type}">▼</span></div>
+        <div class="section-collapsible" id="todo-${type}"><div style="padding-bottom:12px">${steps}</div></div>
         <div class="msg-box">
           <div class="msg-header">
             <span class="msg-label">✉️ 담임 선생님께 보낼 문자</span>
-            <span class="msg-hint">직접 수정할 수 있어요</span>
+            <span class="msg-hint" id="msg-hint-${type}">직접 수정할 수 있어요</span>
           </div>
           <textarea class="msg-textarea" id="msg-text-${type}" oninput="checkMsgBlanks('${type}')"></textarea>
           <div class="msg-warn" id="msg-warn-${type}">💡 [ ] 안의 내용을 채워주세요</div>
           <button class="msg-copy-btn" id="copy-btn-${type}" onclick="copyMsg('${type}')">📋 복사하기</button>
         </div>
-        ${inlineSearch}
-        <div class="section-toggle" onclick="toggleSection('todo-${type}','arrow-todo-${type}')"><span class="section-toggle-title">✅ 지금 해야 할 일 (3단계)</span><span class="section-toggle-arrow open" id="arrow-todo-${type}">▼</span></div>
-        <div class="section-collapsible default-open" id="todo-${type}"><div style="padding-bottom:12px">${steps}</div></div>
-        <div style="border-top:1px solid var(--line)">${rows}</div>
-        <div class="notice-box ${r.notice.cls}">${r.notice.txt}</div>
-        <div class="section-toggle" onclick="toggleSection('chk-${type}','arrow-chk-${type}')"><span class="section-toggle-title">📄 소견서 체크리스트</span><span class="section-toggle-arrow" id="arrow-chk-${type}">▼</span></div>
-        <div class="section-collapsible" id="chk-${type}"><div class="checklist-box">${checks}<div class="check-feedback" id="chk-fb-${type}"></div></div></div>
       </div>
     </div>`;
   /* 문자 미리보기 초기값 채우기 */
@@ -635,10 +645,12 @@ function inlineSearch(){
 function showInlineDetail(escapedName){
   const d=DISEASES.find(x=>esc(x.n)===escapedName);
   if(!d)return;
-  currentMsgDisease=d;
+  currentMsgDisease=d;saveRecent(d.n);
   fillMsgText('A');
   document.getElementById('inline-search-input').value=d.n;
-  document.getElementById('inline-result').innerHTML=`<div class="inline-detail"><div class="inline-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="inline-days">${d.ds}</div><div class="inline-days-sub">${d.d}</div><div class="inline-doc">📄 필요 서류: ${d.doc}${d.note?'<br>⚠️ '+d.note:''}</div></div>`;
+  const _e=endDateText(d);
+  const _eHtml=_e?`<div class="hero-return" style="margin:10px 0 0">🏫 오늘 진단 기준 <strong>${_e}</strong>부터 등교 가능<div class="hero-return-note">소견서 기간이 다르면 그 기간을 따릅니다</div></div>`:'';
+  document.getElementById('inline-result').innerHTML=`<div class="inline-detail"><div class="inline-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="inline-days">${d.ds}</div><div class="inline-days-sub">${d.d}</div>${_eHtml}<div class="inline-doc">📄 필요 서류: ${d.doc}${d.note?'<br>⚠️ '+d.note:''}</div></div>`;
 }
 function toggleCheck(item,boxId){
   const cb=item.querySelector('.check-box');
@@ -652,17 +664,28 @@ function toggleCheck(item,boxId){
   if(checked===total){fb.classList.add('ok');fb.textContent='✅ 모두 확인! 소견서를 담임 선생님께 제출하세요.';}
   else if(checked>0){fb.classList.add('warn');fb.textContent='⚠️ 체크되지 않은 항목이 있으면 출석인정이 안 될 수 있습니다.';}
 }
-/* 문자 미리보기 채우기 — 선택된 병명이 있으면 반영 */
+/* 문자 미리보기 채우기 — 선택된 병명·종료일 자동 반영 */
 function fillMsgText(type){
   const ta=document.getElementById('msg-text-'+type);
   if(!ta) return;
   let msg=(typeof RESULTS[type].getMsg==='function')?RESULTS[type].getMsg():(RESULTS[type].msg||'');
   if(currentMsgDisease && type==='A'){
+    const d=currentMsgDisease;
+    const endTxt=endDateText(d);
+    const endPart=endTxt?(endTxt+'까지'):'[종료일]까지';
+    const guide=endTxt?'\n※ 소견서에 기재된 기간이 다르면 그 기간을 따릅니다.':'';
     msg='안녕하세요, 선생님. '+getChildLabel()+' 어머니/아버지입니다.\n'
-      +currentMsgDisease.n+'으로 진단받아 오늘('+todayStr()+')부터 [종료일]까지 등교중지 예정입니다.\n'
-      +currentMsgDisease.doc+'을 제출하겠습니다.';
+      +d.n+'으로 진단받아 오늘('+todayStr()+')부터 '+endPart+' 등교중지 예정입니다.\n'
+      +d.doc+'을 제출하겠습니다.'+guide;
   }
   ta.value=msg;
+  /* 아이 정보 미입력 안내 */
+  const hint=document.getElementById('msg-hint-'+type);
+  if(hint){
+    hint.innerHTML = childInfo.name
+      ? '직접 수정할 수 있어요'
+      : '<span style="color:var(--blue);cursor:pointer;font-weight:600" onclick="toggleDropdown()">👶 이름 입력하기</span>';
+  }
   checkMsgBlanks(type);
 }
 
@@ -696,6 +719,31 @@ function copyMsg(type){
 }
 
 
+/* ━━ 최근 조회 기억 (localStorage) ━━ */
+function saveRecent(name){
+  try{
+    let arr=JSON.parse(localStorage.getItem('recentDiseases')||'[]');
+    arr=arr.filter(function(n){return n!==name;});
+    arr.unshift(name);
+    localStorage.setItem('recentDiseases', JSON.stringify(arr.slice(0,3)));
+  }catch(e){}
+}
+function getRecent(){
+  try{ return JSON.parse(localStorage.getItem('recentDiseases')||'[]'); }catch(e){ return []; }
+}
+function renderRecent(){
+  const box=document.getElementById('recent-box');
+  if(!box) return;
+  const arr=getRecent().filter(function(n){ return DISEASES.some(function(d){return d.n===n;}); });
+  if(!arr.length){ box.style.display='none'; return; }
+  box.innerHTML='<span class="recent-label">최근 조회</span>'
+    + arr.map(function(n){
+        const d=DISEASES.find(function(x){return x.n===n;});
+        return '<span class="recent-pill" onclick="showHeroDetail(\''+esc(n)+'\')">'+n+'</span>';
+      }).join('');
+  box.style.display='flex';
+}
+
 /* 첫 화면 병명 검색 */
 let mainSelectedDisease=null;
 function mainSearch(){
@@ -711,8 +759,11 @@ function showHeroDetail(escapedName){
   const d=DISEASES.find(x=>esc(x.n)===escapedName);
   if(!d)return;
   mainSelectedDisease=d;
+  saveRecent(d.n);renderRecent();
   document.getElementById('main-search-input').value=d.n;
-  document.getElementById('main-search-result').innerHTML=`<div class="hero-detail"><div class="hero-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="hero-days">${d.ds}</div><div class="hero-days-sub">${d.d}</div><div class="hero-doc">📄 필요 서류: ${d.doc}</div>${d.note?'<div class="hero-note">⚠️ '+d.note+'</div>':''}<div class="hero-actions"><button class="hero-btn hero-btn-primary" onclick="applyDiseaseAndShowResult()">출석인정 안내 보기</button><button class="hero-btn hero-btn-secondary" onclick="copyMsgFromHero()">✉️ 문자 작성</button></div></div>`;
+  const _end=endDateText(d);
+  const _endHtml=_end?`<div class="hero-return">🏫 오늘 진단 기준 <strong>${_end}</strong>부터 등교 가능<div class="hero-return-note">소견서 기간이 다르면 그 기간을 따릅니다</div></div>`:'';
+  document.getElementById('main-search-result').innerHTML=`<div class="hero-detail"><div class="hero-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="hero-days">${d.ds}</div><div class="hero-days-sub">${d.d}</div>${_endHtml}<div class="hero-doc">📄 필요 서류: ${d.doc}</div>${d.note?'<div class="hero-note">⚠️ '+d.note+'</div>':''}<div class="hero-actions"><button class="hero-btn hero-btn-primary" onclick="applyDiseaseAndShowResult()">출석인정 안내 보기</button><button class="hero-btn hero-btn-secondary" onclick="copyMsgFromHero()">✉️ 문자 작성</button></div></div>`;
 }
 function applyDiseaseAndShowResult(){
   if(!mainSelectedDisease)return;
@@ -733,22 +784,67 @@ function setGrade(g,btn){currentGrade=g;document.querySelectorAll('.grade-btn').
 function filterDiseases(){selectedDisease=null;document.getElementById('dis-detail').innerHTML='';renderList();}
 function renderList(){
   const q=(document.getElementById('search-input').value||'').trim();
-  const list=DISEASES.filter(d=>{const gm=currentGrade==='all'||String(d.g)===currentGrade;const qm=!q||d.n.includes(q)||d.a.some(a=>a.includes(q)||q.includes(a));return gm&&qm;});
+  let list=DISEASES.filter(function(d){
+    const gm=currentGrade==='all'||String(d.g)===currentGrade;
+    const qm=!q||d.n.includes(q)||d.a.some(function(a){return a.includes(q)||q.includes(a);});
+    return gm&&qm;
+  });
+  /* 학령기 흔한 감염병을 상단에 정렬 */
+  list.sort(function(a,b){
+    const sa=isSchoolDisease(a.n)?0:1, sb=isSchoolDisease(b.n)?0:1;
+    if(sa!==sb) return sa-sb;
+    return a.g-b.g;
+  });
   if(!list.length){document.getElementById('dis-list').innerHTML='<div class="empty-state">검색 결과가 없습니다.<br>다른 이름으로 검색해 보세요.</div>';return;}
-  document.getElementById('dis-list').innerHTML=list.map(d=>{const alias=d.a.length?`<div class="dis-alias">별칭: ${d.a.join(', ')}</div>`:'';return `<div class="dis-item ${selectedDisease===d.n?'active':''}" onclick="showDiseaseDetail('${esc(d.n)}')"><div><div class="dis-name">${d.n}</div>${alias}<div class="dis-period">${d.ds}</div></div><span class="grade-tag g${d.g}">${d.g}급</span></div>`;}).join('');
+  document.getElementById('dis-list').innerHTML=list.map(function(d){
+    const alias=d.a.length?('<div class="dis-alias">별칭: '+d.a.join(', ')+'</div>'):'';
+    const mark=isSchoolDisease(d.n)?'<span class="dis-common">자주</span>':'';
+    return '<div class="dis-item '+(selectedDisease===d.n?'active':'')+'" onclick="showDiseaseDetail(\''+esc(d.n)+'\')">'
+      +'<div><div class="dis-name">'+d.n+mark+'</div>'+alias+'<div class="dis-period">'+d.ds+'</div></div>'
+      +'<span class="grade-tag g'+d.g+'">'+d.g+'급</span></div>';
+  }).join('');
 }
 function showDiseaseDetail(escapedName){
   const d=DISEASES.find(x=>esc(x.n)===escapedName);
   if(!d)return;
-  selectedDisease=d.n;renderList();
+  selectedDisease=d.n;saveRecent(d.n);renderList();
   const gradeDesc=['','생물테러·치명 감염병 (즉시 신고·음압격리)','24시간 이내 격리 필요','24시간 이내 신고','표본감시 감염병'];
   const alias=d.a.length?`<div class="info-row"><span class="info-lbl">다른 이름</span><span class="info-val">${d.a.join(', ')}</span></div>`:'';
-  document.getElementById('dis-detail').innerHTML=`<div class="dis-detail"><div class="dis-detail-head"><div class="dis-detail-name">${d.n}</div><span class="grade-tag g${d.g}">${d.g}급</span></div><div class="result-body"><div class="days-highlight"><div class="days-label">등교중지 기간</div><div class="days-value">${d.ds}</div><div class="days-sub">${d.d}</div></div><div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val ok">✅ 가능 (법정 감염병)</span></div><div class="info-row"><span class="info-lbl">급 특성</span><span class="info-val">${gradeDesc[d.g]}</span></div>${alias}<div class="info-row"><span class="info-lbl">필요 서류</span><span class="info-val">${d.doc}</span></div>${d.note?`<div class="info-row"><span class="info-lbl">참고</span><span class="info-val warn">⚠️ ${d.note}</span></div>`:''}
+  document.getElementById('dis-detail').innerHTML=`<div class="dis-detail"><div class="dis-detail-head"><div class="dis-detail-name">${d.n}</div><span class="grade-tag g${d.g}">${d.g}급</span></div><div class="result-body"><div class="days-highlight"><div class="days-label">등교중지 기간</div><div class="days-value">${d.ds}</div><div class="days-sub">${d.d}</div></div>${endDateText(d)?`<div class="hero-return">🏫 오늘 진단 기준 <strong>${endDateText(d)}</strong>부터 등교 가능<div class="hero-return-note">소견서 기간이 다르면 그 기간을 따릅니다</div></div>`:''}<div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val ok">✅ 가능 (법정 감염병)</span></div><div class="info-row"><span class="info-lbl">급 특성</span><span class="info-val">${gradeDesc[d.g]}</span></div>${alias}<div class="info-row"><span class="info-lbl">필요 서류</span><span class="info-val">${d.doc}</span></div>${d.note?`<div class="info-row"><span class="info-lbl">참고</span><span class="info-val warn">⚠️ ${d.note}</span></div>`:''}
         ${d.prev?`<div class="info-row"><span class="info-lbl">예방 방법</span><span class="info-val">💡 ${d.prev}</span></div>`:''}<div class="notice-box amber">📋 소견서에 반드시 <strong>진단명(${d.n})</strong>과 <strong>등교중지 기간</strong>이 함께 기재되어야 출석 인정이 됩니다.</div></div></div>`;
   document.getElementById('dis-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 
+
+/* ━━ 등교 재개일 자동 계산 ━━ */
+const DAY_KR=['일','월','화','수','목','금','토'];
+function fmtDateKo(d){ return (d.getMonth()+1)+'월 '+d.getDate()+'일('+DAY_KR[d.getDay()]+')'; }
+function addDays(base,n){ const d=new Date(base); d.setDate(d.getDate()+n); return d; }
+
+/* ds 텍스트에서 일수 추출 — 없으면 null */
+function guessDays(ds){
+  if(!ds) return null;
+  const s=String(ds);
+  /* "통상 7일", "5일", "2일" 등 */
+  let m=s.match(/(\d+)\s*~\s*(\d+)\s*일/);
+  if(m) return parseInt(m[2],10);           /* 범위면 큰 값 */
+  m=s.match(/(\d+)\s*일/);
+  if(m) return parseInt(m[1],10);
+  m=s.match(/(\d+)\s*~\s*(\d+)\s*주/);
+  if(m) return parseInt(m[2],10)*7;
+  m=s.match(/(\d+)\s*주/);
+  if(m) return parseInt(m[1],10)*7;
+  return null;
+}
+
+/* 등교 재개일 문구 생성 */
+function endDateText(dis){
+  const n=guessDays(dis&&dis.ds);
+  if(n===null) return null;
+  const end=addDays(new Date(), n);
+  return fmtDateKo(end);
+}
 
 /* 이번 달 주의 감염병 렌더 */
 function renderSeasonBox(){
@@ -903,7 +999,7 @@ window.addEventListener('pageshow', e => {
     switchTab(tab, false);
   }
 });
-loadChildInfo();renderList();renderBadge();buildYearOptions();
+loadChildInfo();renderList();renderBadge();buildYearOptions();renderRecent();
 /* 초기 진입 — URL 변경 없이 현재 탭을 history에 기록 */
 if(!history.state || !history.state.tab){
   history.replaceState({tab:'situation'}, '', location.pathname);
