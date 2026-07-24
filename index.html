@@ -209,6 +209,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .stat-bottom { display:flex; justify-content:space-between; align-items:center; }
 .stat-days { font-size:12px; color:var(--ink-3); }
 .stat-detail-link { font-size:12px; color:var(--blue); font-weight:600; }
+.stat-prev { font-size:12px; color:var(--green); background:var(--green-bg); border-radius:var(--radius-sm); padding:8px 10px; margin-top:9px; line-height:1.5; }
 .error-box { background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:13px 14px; font-size:13px; color:#7A1810; line-height:1.6; }
 .empty-state { text-align:center; padding:36px 16px; color:var(--ink-3); font-size:13px; line-height:1.7; }
 .source-note { margin-top:20px; font-size:11px; color:var(--ink-3); text-align:center; line-height:1.6; }
@@ -301,14 +302,10 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 </div>
 
 <div class="page" id="tab-stats">
-  <p class="stats-hint">이번 달 전국에서 가장 많이 발생한 감염병 TOP 5입니다.<br>카드를 누르면 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</p>
+  <p class="stats-hint">전국에서 가장 많이 발생한 감염병 TOP 5입니다.<br>카드를 누르면 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</p>
   <div class="filter-row">
-    <select id="stat-year"><option value="2025">2025년</option><option value="2024">2024년</option><option value="2023">2023년</option></select>
-    <select id="stat-month">
-      <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
-      <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
-      <option value="07">7월</option><option value="08">8월</option><option value="09">9월</option>
-      <option value="10">10월</option><option value="11">11월</option><option value="12">12월</option>
+    <select id="stat-year">
+      <option value="2024">2024년</option><option value="2023">2023년</option><option value="2022">2022년</option>
     </select>
     <button class="fetch-btn" onclick="fetchStats()" id="fetch-btn">조회</button>
   </div>
@@ -382,31 +379,31 @@ const DISEASES = [
   {g:1,n:"디프테리아",a:[],ds:"항생제 시작 후 최소 1일",d:"항생제 치료 후 24시간 이상",doc:"진료확인서 또는 의사소견서",note:""},
   {g:1,n:"니파바이러스감염증",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:"2026.1.1. 추가 지정"},
   /* 2급 (21종) */
-  {g:2,n:"결핵",a:["폐결핵","TB"],ds:"의사소견서 기재 기간",d:"전염성 소실 시까지 (의사소견 기준)",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"수두",a:["물집","수포","chickenpox"],ds:"통상 7일 내외 (소견서 기준 우선)",d:"모든 수포에 딱지가 생길 때까지",doc:"진료확인서 또는 의사소견서",note:"학교 내 유행 잦음"},
-  {g:2,n:"홍역",a:["measles"],ds:"발진 발생일로부터 5일",d:"발진 후 5일까지",doc:"진료확인서 또는 의사소견서",note:""},
+  {g:2,n:"결핵",a:["폐결핵","TB"],ds:"의사소견서 기재 기간",d:"전염성 소실 시까지 (의사소견 기준)",doc:"진료확인서 또는 의사소견서",prev:"BCG 접종 여부를 확인하세요",note:""},
+  {g:2,n:"수두",a:["물집","수포","chickenpox"],ds:"통상 7일 내외 (소견서 기준 우선)",d:"모든 수포에 딱지가 생길 때까지",doc:"진료확인서 또는 의사소견서",prev:"수두 예방접종 2회 완료 여부를 확인하세요",note:"학교 내 유행 잦음"},
+  {g:2,n:"홍역",a:["measles"],ds:"발진 발생일로부터 5일",d:"발진 후 5일까지",doc:"진료확인서 또는 의사소견서",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
   {g:2,n:"콜레라",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:2,n:"장티푸스",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:2,n:"파라티푸스",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:2,n:"세균성이질",a:["이질"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:2,n:"장출혈성대장균감염증",a:["O157"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"A형간염",a:[],ds:"황달 발생일로부터 7일",d:"황달 발생 후 7일까지",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"백일해",a:[],ds:"항생제 시작 후 5일",d:"항생제 치료 후 5일까지",doc:"진료확인서 또는 의사소견서",note:"영유아 위험도 높음"},
-  {g:2,n:"유행성이하선염(볼거리)",a:["볼거리","이하선염","침샘","mumps"],ds:"부어오름 시작 후 5일",d:"이하선 종창 후 5일까지",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"풍진",a:["rubella"],ds:"발진 발생일로부터 7일",d:"발진 후 7일까지",doc:"진료확인서 또는 의사소견서",note:""},
+  {g:2,n:"A형간염",a:[],ds:"황달 발생일로부터 7일",d:"황달 발생 후 7일까지",doc:"진료확인서 또는 의사소견서",prev:"A형간염 예방접종을 확인하세요",note:""},
+  {g:2,n:"백일해",a:[],ds:"항생제 시작 후 5일",d:"항생제 치료 후 5일까지",doc:"진료확인서 또는 의사소견서",prev:"DTaP 백신 접종 일정을 확인하세요",note:"영유아 위험도 높음"},
+  {g:2,n:"유행성이하선염(볼거리)",a:["볼거리","이하선염","침샘","mumps"],ds:"부어오름 시작 후 5일",d:"이하선 종창 후 5일까지",doc:"진료확인서 또는 의사소견서",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
+  {g:2,n:"풍진",a:["rubella"],ds:"발진 발생일로부터 7일",d:"발진 후 7일까지",doc:"진료확인서 또는 의사소견서",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
   {g:2,n:"폴리오",a:["소아마비"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"수막구균 감염증",a:["뇌수막염","수막염"],ds:"항생제 시작 후 1일",d:"항생제 치료 후 24시간까지",doc:"진료확인서 또는 의사소견서",note:""},
+  {g:2,n:"수막구균 감염증",a:["뇌수막염","수막염"],ds:"항생제 시작 후 1일",d:"항생제 치료 후 24시간까지",doc:"진료확인서 또는 의사소견서",prev:"집단생활 시 개인위생을 철저히 하세요",note:""},
   {g:2,n:"b형헤모필루스인플루엔자",a:["Hib"],ds:"항생제 시작 후 1일",d:"항생제 치료 후 24시간까지",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"폐렴구균 감염증",a:["폐렴"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
+  {g:2,n:"폐렴구균 감염증",a:["폐렴"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",prev:"폐렴구균 백신 접종을 확인하세요",note:""},
   {g:2,n:"한센병",a:["나병"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"성홍열",a:["성홍","scarlet fever"],ds:"항생제 시작 후 1일",d:"항생제 치료 후 24시간까지",doc:"진료확인서 또는 의사소견서",note:"학교 내 유행 잦음"},
+  {g:2,n:"성홍열",a:["성홍","scarlet fever"],ds:"항생제 시작 후 1일",d:"항생제 치료 후 24시간까지",doc:"진료확인서 또는 의사소견서",prev:"기침 예절을 지키고 손 씻기를 철저히 하세요",note:"학교 내 유행 잦음"},
   {g:2,n:"반코마이신내성황색포도알균(VRSA)감염증",a:["VRSA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:2,n:"카바페넴내성장내세균목(CRE)감염증",a:["CRE"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:2,n:"E형간염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   /* 3급 (28종) */
   {g:3,n:"파상풍",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:3,n:"B형간염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"일본뇌염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
+  {g:3,n:"일본뇌염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",prev:"일본뇌염 예방접종을 확인하세요",note:""},
   {g:3,n:"C형간염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:3,n:"말라리아",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:3,n:"레지오넬라증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
@@ -433,14 +430,14 @@ const DISEASES = [
   {g:3,n:"매독",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   {g:3,n:"임질",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
   /* 4급 (23종) */
-  {g:4,n:"인플루엔자(독감)",a:["독감","플루","flu","몸살"],ds:"열이 내린 뒤 2일",d:"해열 후 48시간 (학교 등 집단시설)",doc:"진료확인서 또는 의사소견서",note:"학교 내 유행 잦음"},
+  {g:4,n:"인플루엔자(독감)",a:["독감","플루","flu","몸살"],ds:"열이 내린 뒤 2일",d:"해열 후 48시간 (학교 등 집단시설)",doc:"진료확인서 또는 의사소견서",prev:"매년 가을 독감 예방접종을 받으세요",note:"학교 내 유행 잦음"},
   {g:4,n:"회충증",a:["회충"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"편충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"요충증",a:["요충","항문가려움"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"간흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"폐흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"장흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"수족구병",a:["수족구","손발입"],ds:"통상 5~7일 (소견서 기준 우선)",d:"의사소견서에 기재된 기간 (통상 수포 소실까지)",doc:"의사소견서 (격리 필요 명시)",note:"학교 내 유행 잦음"},
+  {g:4,n:"수족구병",a:["수족구","손발입"],ds:"통상 5~7일 (소견서 기준 우선)",d:"의사소견서에 기재된 기간 (통상 수포 소실까지)",doc:"의사소견서 (격리 필요 명시)",prev:"손 씻기를 철저히 하고 장난감을 자주 소독하세요",note:"학교 내 유행 잦음"},
   {g:4,n:"클라미디아 감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"연성하감",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"성기단순포진",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
@@ -449,13 +446,13 @@ const DISEASES = [
   {g:4,n:"메티실린내성황색포도알균(MRSA)감염증",a:["MRSA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"다제내성녹농균(MRPA)감염증",a:["MRPA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"다제내성아시네토박터바우마니균(MRAB)감염증",a:["MRAB"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"장관감염증(노로바이러스 등)",a:["장염","노로바이러스","노로","구토","설사","식중독"],ds:"설사·구토 멈춘 뒤 2일",d:"증상 소실 후 48시간",doc:"진료확인서 또는 의사소견서",note:"노로바이러스 포함"},
-  {g:4,n:"급성호흡기감염증",a:["호흡기감염","기침","콧물"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
+  {g:4,n:"장관감염증(노로바이러스 등)",a:["장염","노로바이러스","노로","구토","설사","식중독"],ds:"설사·구토 멈춘 뒤 2일",d:"증상 소실 후 48시간",doc:"진료확인서 또는 의사소견서",prev:"음식을 충분히 익혀 먹고 손 씻기를 철저히 하세요",note:"노로바이러스 포함"},
+  {g:4,n:"급성호흡기감염증",a:["호흡기감염","기침","콧물"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",prev:"기침 예절과 마스크 착용을 지도하세요",note:""},
   {g:4,n:"해외유입기생충감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"엔테로바이러스감염증",a:["엔테로"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
+  {g:4,n:"엔테로바이러스감염증",a:["엔테로"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",prev:"손 씻기를 철저히 하세요",note:""},
   {g:4,n:"사람유두종바이러스 감염증",a:["HPV"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
   {g:4,n:"Candida auris 감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:"2026.1.1. 신규 지정"},
-  {g:4,n:"유행성각결막염",a:["눈병","눈꼽","아폴로눈병","결막염"],ds:"통상 1~2주 (소견서 기준 우선)",d:"의사소견서에 기재된 기간 (통상 2주 내외)",doc:"의사소견서",note:"학교 내 유행 잦음"},
+  {g:4,n:"유행성각결막염",a:["눈병","눈꼽","아폴로눈병","결막염"],ds:"통상 1~2주 (소견서 기준 우선)",d:"의사소견서에 기재된 기간 (통상 2주 내외)",doc:"의사소견서",prev:"손으로 눈을 만지지 않고 수건을 따로 쓰세요",note:"학교 내 유행 잦음"},
 ];
 /* TODOS not found */
 const TODOS={
@@ -649,47 +646,74 @@ function showDiseaseDetail(escapedName){
   selectedDisease=d.n;renderList();
   const gradeDesc=['','생물테러·치명 감염병 (즉시 신고·음압격리)','24시간 이내 격리 필요','24시간 이내 신고','표본감시 감염병'];
   const alias=d.a.length?`<div class="info-row"><span class="info-lbl">다른 이름</span><span class="info-val">${d.a.join(', ')}</span></div>`:'';
-  document.getElementById('dis-detail').innerHTML=`<div class="dis-detail"><div class="dis-detail-head"><div class="dis-detail-name">${d.n}</div><span class="grade-tag g${d.g}">${d.g}급</span></div><div class="result-body"><div class="days-highlight"><div class="days-label">등교중지 기간</div><div class="days-value">${d.ds}</div><div class="days-sub">${d.d}</div></div><div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val ok">✅ 가능 (법정 감염병)</span></div><div class="info-row"><span class="info-lbl">급 특성</span><span class="info-val">${gradeDesc[d.g]}</span></div>${alias}<div class="info-row"><span class="info-lbl">필요 서류</span><span class="info-val">${d.doc}</span></div>${d.note?`<div class="info-row"><span class="info-lbl">참고</span><span class="info-val warn">⚠️ ${d.note}</span></div>`:''}<div class="notice-box amber">📋 소견서에 반드시 <strong>진단명(${d.n})</strong>과 <strong>등교중지 기간</strong>이 함께 기재되어야 출석 인정이 됩니다.</div></div></div>`;
+  document.getElementById('dis-detail').innerHTML=`<div class="dis-detail"><div class="dis-detail-head"><div class="dis-detail-name">${d.n}</div><span class="grade-tag g${d.g}">${d.g}급</span></div><div class="result-body"><div class="days-highlight"><div class="days-label">등교중지 기간</div><div class="days-value">${d.ds}</div><div class="days-sub">${d.d}</div></div><div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val ok">✅ 가능 (법정 감염병)</span></div><div class="info-row"><span class="info-lbl">급 특성</span><span class="info-val">${gradeDesc[d.g]}</span></div>${alias}<div class="info-row"><span class="info-lbl">필요 서류</span><span class="info-val">${d.doc}</span></div>${d.note?`<div class="info-row"><span class="info-lbl">참고</span><span class="info-val warn">⚠️ ${d.note}</span></div>`:''}
+        ${d.prev?`<div class="info-row"><span class="info-lbl">예방 방법</span><span class="info-val">💡 ${d.prev}</span></div>`:''}<div class="notice-box amber">📋 소견서에 반드시 <strong>진단명(${d.n})</strong>과 <strong>등교중지 기간</strong>이 함께 기재되어야 출석 인정이 됩니다.</div></div></div>`;
   document.getElementById('dis-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 
-async function callStatsAPI(year,month){
-  /* 같은 도메인의 Vercel 서버리스 함수 경유 — CORS 불필요 */
-  const url='/api/stats?year='+year+'&month='+month;
-  console.log('[API 호출]', url);
+async function callStatsAPI(year){
+  /* Vercel 서버리스 함수 경유 — 연도별 감염병 발생 현황 */
+  const url='/api/stats?year='+year;
   const res=await fetch(url);
-  console.log('[API 응답]', res.status);
   if(!res.ok)throw new Error('HTTP '+res.status);
   const json=await res.json();
-  if(json.ok===false) throw new Error(json.rawText||json.error||'API 오류');
+  if(json.ok===false) throw new Error(json.error||json.snippet||'API 오류');
   const items=json?.response?.body?.items?.item||[];
-  return items.filter(it=>parseInt(it.cnt||0)>0).sort((a,b)=>parseInt(b.cnt||0)-parseInt(a.cnt||0));
+  /* 필드: year, patntType, icdGroupNm, icdNm, resultVal
+     '계' 항목만 사용, 발생 0 제외, 내림차순 정렬 */
+  return items
+    .filter(it=>it.patntType==='계' && parseInt(it.resultVal||0)>0)
+    .map(it=>({name:(it.icdNm||'').trim(), cnt:parseInt(it.resultVal||0), grade:it.icdGroupNm||''}))
+    .sort((a,b)=>b.cnt-a.cnt);
 }
 async function loadOutbreakBanner(){
-  const now=new Date(),year=now.getFullYear(),month=String(now.getMonth()+1).padStart(2,'0');
+  const year='2024';
   try{
-    const top5=(await callStatsAPI(year,month)).slice(0,5);if(!top5.length)return;
-    document.getElementById('outbreak-period').textContent=`${year}년 ${parseInt(month)}월 · 전국`;
-    document.getElementById('outbreak-pills').innerHTML=top5.map(it=>{const dis=DISEASES.find(d=>d.n.includes(it.diseaseNm)||it.diseaseNm.includes(d.n));return `<span class="outbreak-pill" onclick="${dis?`goToDisease('${esc(dis.n)}')`:`switchTab('search')`}">${it.diseaseNm||'-'} <span class="outbreak-num">${Number(it.cnt).toLocaleString()}명</span></span>`;}).join('');
+    const top5=(await callStatsAPI(year)).slice(0,5);
+    if(!top5.length)return;
+    document.getElementById('outbreak-period').textContent=year+'년 · 전국';
+    document.getElementById('outbreak-pills').innerHTML=top5.map(function(it){
+      const dis=DISEASES.find(function(d){return d.n.includes(it.name)||it.name.includes(d.n);});
+      const onclick=dis?("goToDisease('"+esc(dis.n)+"')"):"switchTab('search')";
+      return '<span class="outbreak-pill" onclick="'+onclick+'">'+it.name+' <span class="outbreak-num">'+it.cnt.toLocaleString()+'명</span></span>';
+    }).join('');
     document.getElementById('outbreak-banner').style.display='block';
   }catch(e){}
 }
 async function fetchStats(){
-  const year=document.getElementById('stat-year').value,month=document.getElementById('stat-month').value;
-  const btn=document.getElementById('fetch-btn');btn.disabled=true;btn.textContent='조회 중...';
+  const year=document.getElementById('stat-year').value;
+  const btn=document.getElementById('fetch-btn');
+  btn.disabled=true;btn.textContent='조회 중...';
   document.getElementById('stats-result').innerHTML='<div class="loading"><div class="loading-spinner"></div>발생 현황을 불러오는 중입니다...</div>';
   try{
-    const top5=(await callStatsAPI(year,month)).slice(0,5);
-    if(!top5.length){document.getElementById('stats-result').innerHTML='<div class="empty-state">해당 기간 발생 보고된 감염병이 없습니다.<br>연도·월을 변경해 보세요.</div>';return;}
-    const maxCnt=parseInt(top5[0].cnt||1);
-    const header=`<div class="top5-header"><div class="top5-title">이번 달 주의할 감염병 TOP 5</div><div class="top5-period">${year}년 ${parseInt(month)}월 · 전국</div></div>`;
-    const cards=top5.map((it,i)=>{const cnt=parseInt(it.cnt||0);const pct=Math.round(cnt/maxCnt*100);const dis=DISEASES.find(d=>d.n.includes(it.diseaseNm)||it.diseaseNm.includes(d.n));const badge=dis?`<span class="grade-tag g${dis.g}" style="margin-left:6px">${dis.g}급</span>`:'';const days=dis?`<span class="stat-days">🏠 ${dis.ds}</span>`:'<span class="stat-days">검색 탭에서 확인</span>';const link=dis?`<span class="stat-detail-link" onclick="event.stopPropagation();goToDisease('${esc(dis.n)}')">상세 보기 →</span>`:'';return `<div class="stat-card" onclick="${dis?`goToDisease('${esc(dis.n)}')`:''}"><div class="stat-rank-row"><div class="stat-rank${i===0?' r1':''}">${i+1}</div><div class="stat-disease">${it.diseaseNm||'-'}${badge}</div><div class="stat-count">${cnt.toLocaleString()}<span class="stat-count-unit">명</span></div></div><div class="stat-bar-wrap"><div class="stat-bar" style="width:${pct}%"></div></div><div class="stat-bottom">${days}${link}</div></div>`;}).join('');
+    const top5=(await callStatsAPI(year)).slice(0,5);
+    if(!top5.length){document.getElementById('stats-result').innerHTML='<div class="empty-state">해당 연도 발생 보고된 감염병이 없습니다.<br>연도를 변경해 보세요.</div>';return;}
+    const maxCnt=top5[0].cnt||1;
+    const header='<div class="top5-header"><div class="top5-title">가장 많이 발생한 감염병 TOP 5</div><div class="top5-period">'+year+'년 · 전국</div></div>';
+    const cards=top5.map(function(it,i){
+      const pct=Math.round(it.cnt/maxCnt*100);
+      const dis=DISEASES.find(function(d){return d.n.includes(it.name)||it.name.includes(d.n);});
+      const badge=dis?('<span class="grade-tag g'+dis.g+'" style="margin-left:6px">'+dis.g+'급</span>'):'';
+      const days=dis?('<span class="stat-days">🏠 '+dis.ds+'</span>'):'<span class="stat-days">전체 목록에서 확인</span>';
+      const prev=(dis&&dis.prev)?('<div class="stat-prev">💡 '+dis.prev+'</div>'):'';
+      const link=dis?('<span class="stat-detail-link" onclick="event.stopPropagation();goToDisease(\''+esc(dis.n)+'\')">상세 보기 →</span>'):'';
+      const cardClick=dis?('goToDisease(\''+esc(dis.n)+'\')'):'';
+      return '<div class="stat-card" onclick="'+cardClick+'">'
+        +'<div class="stat-rank-row">'
+        +'<div class="stat-rank'+(i===0?' r1':'')+'">'+(i+1)+'</div>'
+        +'<div class="stat-disease">'+it.name+badge+'</div>'
+        +'<div class="stat-count">'+it.cnt.toLocaleString()+'<span class="stat-count-unit">명</span></div>'
+        +'</div>'
+        +'<div class="stat-bar-wrap"><div class="stat-bar" style="width:'+pct+'%"></div></div>'
+        +'<div class="stat-bottom">'+days+link+'</div>'
+        +prev
+        +'</div>';
+    }).join('');
     const notice='<div class="notice-box blue" style="margin-top:4px">💡 카드를 누르면 해당 감염병의 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</div>';
     document.getElementById('stats-result').innerHTML=header+cards+notice;
   }catch(e){
-    console.error('[fetchStats 오류]', e.name, e.message, e.stack);
-    document.getElementById('stats-result').innerHTML='<div class="error-box"><strong>발생 현황을 불러올 수 없습니다</strong><br><br>잠시 후 다시 시도하거나 연도·월을 변경해 보세요.<br>또는 <a href="https://dportal.kdca.go.kr" target="_blank" rel="noopener">질병관리청 감염병포털</a>에서 직접 확인하세요.<br><br><em>오류: '+String(e.message)+'</em></div><div class="notice-box blue" style="margin-top:12px">💡 상황별 안내·감염병 검색은 인터넷 없이도 정상 작동합니다.</div>';
+    document.getElementById('stats-result').innerHTML='<div class="error-box"><strong>발생 현황을 불러올 수 없습니다</strong><br><br>잠시 후 다시 시도하거나 연도를 변경해 보세요.<br>또는 <a href="https://dportal.kdca.go.kr" target="_blank" rel="noopener">질병관리청 감염병포털</a>에서 직접 확인하세요.<br><br><em>오류: '+String(e.message)+'</em></div><div class="notice-box blue" style="margin-top:12px">💡 상황별 안내·감염병 검색은 인터넷 없이도 정상 작동합니다.</div>';
   }finally{btn.disabled=false;btn.textContent='조회';}
 }
 function goToDisease(escapedName){switchTab('search');setTimeout(()=>showDiseaseDetail(escapedName),80);}
@@ -708,10 +732,8 @@ window.addEventListener('pageshow', e => {
   }
 });
 loadChildInfo();renderList();renderBadge();
-/* 공공데이터포털은 전월까지만 집계 — 현재연도 데이터 없을 수 있어 2025 기본 */
-const _n=new Date(),_y='2025',_m=String(_n.getMonth()+1).padStart(2,'0');
-for(let o of document.getElementById('stat-year').options){if(o.value===_y){o.selected=true;break;}}
-for(let o of document.getElementById('stat-month').options){if(o.value===_m){o.selected=true;break;}}
+}
+}
 /* 초기 진입 — URL 변경 없이 현재 탭을 history에 기록 */
 if(!history.state || !history.state.tab){
   history.replaceState({tab:'situation'}, '', location.pathname);
