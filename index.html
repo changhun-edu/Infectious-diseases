@@ -655,13 +655,12 @@ function showDiseaseDetail(escapedName){
 
 
 async function callStatsAPI(year,month){
-  /* Vercel /api/stats 프록시를 경유해 질병관리청 API 호출 */
-  const url = PROXY_BASE
-    ? `${PROXY_BASE}/api/stats?year=${year}&month=${month}`
-    : null;
-  if(!url) throw new Error('PROXY_BASE가 설정되지 않았습니다. Vercel 배포 후 URL을 입력하세요.');
-  const res=await fetch(url);if(!res.ok)throw new Error(`HTTP ${res.status}`);
-  const json=await res.json();const items=json?.response?.body?.items?.item||[];
+  /* 공공데이터포털 직접 호출 — 브라우저에서는 CORS 허용됨 */
+  const directUrl=`https://apis.data.go.kr/1790387/infectdiseasestats/infectdiseasestatsservice/getInfectdiseaseStats?serviceKey=${encodeURIComponent(API_KEY)}&pageNo=1&numOfRows=100&resultType=json&year=${year}&month=${month}`;
+  const res=await fetch(directUrl);
+  if(!res.ok)throw new Error(`HTTP ${res.status}`);
+  const json=await res.json();
+  const items=json?.response?.body?.items?.item||[];
   return items.filter(it=>parseInt(it.cnt||0)>0).sort((a,b)=>parseInt(b.cnt||0)-parseInt(a.cnt||0));
 }
 async function loadOutbreakBanner(){
