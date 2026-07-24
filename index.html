@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="description" content="우리 아이 오늘 학교 쉬어도 되나요? 감염병 등교중지 출석인정 안내">
-<title>우리 아이 오늘 학교 쉬어도 되나요?</title>
+<meta name="description" content="감염병 등교중지 기간과 출석인정 절차를 안내하는 학부모용 가이드">
+<title>감염병 등교중지 안내 · 학부모용 출석인정 가이드</title>
 <style>
 *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 :root {
@@ -22,7 +22,9 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .app-header { background:var(--card); border-bottom:1px solid var(--line); position:sticky; top:0; z-index:100; }
 .header-inner { max-width:720px; margin:0 auto; padding:0 16px; }
 .header-top { display:flex; align-items:center; justify-content:space-between; padding:9px 0 8px; gap:10px; }
-.app-title { font-size:14px; font-weight:700; color:var(--ink); line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.app-brand { cursor:pointer; min-width:0; flex:1; }
+.app-title { font-size:15px; font-weight:700; color:var(--ink); line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.app-subtitle { font-size:11px; color:var(--ink-3); line-height:1.3; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .child-badge { display:flex; align-items:center; gap:6px; cursor:pointer; flex-shrink:0; padding:5px 10px; border:1px solid var(--line); border-radius:20px; background:var(--card-2); transition:background .12s; position:relative; }
 .child-badge:hover { background:var(--bg); }
 .child-badge-name { font-size:12px; font-weight:600; color:var(--ink-2); white-space:nowrap; max-width:80px; overflow:hidden; text-overflow:ellipsis; }
@@ -47,7 +49,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .page.active { display:block; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
 .hero-search { margin-bottom:24px; }
-.hero-search-inner { background:var(--card); border:1px solid var(--line); border-radius:var(--radius-lg); padding:16px; box-shadow:0 1px 4px rgba(0,0,0,.06); }
+.hero-search-inner { background:var(--card); border:2px solid var(--blue-border); border-radius:var(--radius-lg); padding:16px; box-shadow:0 2px 10px rgba(29,111,235,.08); transition:border-color .15s; }
 .hero-label { font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:10px; }
 .hero-wrap { position:relative; max-width:480px; }
 .hero-wrap input { width:100%; padding:13px 14px 13px 44px; font-size:16px; font-weight:500; border:1.5px solid var(--line); border-radius:var(--radius); background:var(--card-2); color:var(--ink); outline:none; -webkit-appearance:none; transition:border-color .15s,background .15s; }
@@ -79,15 +81,15 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .outbreak-pill:hover { background:var(--blue-bg); border-color:var(--blue-border); color:var(--blue); }
 .outbreak-num { font-size:11px; font-weight:400; color:var(--ink-3); }
 .sit-section-label { font-size:11px; font-weight:700; letter-spacing:.05em; color:var(--ink-3); text-transform:uppercase; margin-bottom:12px; }
-.sit-card { display:flex; align-items:center; gap:14px; padding:16px 14px; background:var(--card); border-radius:var(--radius); cursor:pointer; margin-bottom:10px; width:100%; text-align:left; transition:background .13s; border:none; box-shadow:0 1px 3px rgba(0,0,0,.06); }
-.sit-card:hover { background:var(--blue-bg); }
-.sit-card.active { background:var(--blue-bg); box-shadow:0 0 0 2px var(--blue); }
+.sit-card { display:flex; align-items:center; gap:14px; padding:16px 14px; background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius); cursor:pointer; margin-bottom:10px; width:100%; text-align:left; transition:border-color .13s,background .13s; }
+.sit-card:hover { border-color:var(--blue); background:var(--blue-bg); }
+.sit-card.active { border-color:var(--blue); background:var(--blue-bg); box-shadow:0 0 0 1px var(--blue); }
 .sit-icon { width:52px; height:52px; border-radius:13px; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
 .sit-icon.red { background:var(--red-bg); }
 .sit-icon.amber { background:var(--amber-bg); }
 .sit-icon.green { background:var(--green-bg); }
 .sit-icon.gray  { background:var(--card-2); }
-.sit-chevron { color:var(--ink-3); font-size:18px; flex-shrink:0; margin-left:auto; }
+.sit-chevron { color:var(--blue); font-size:22px; font-weight:700; flex-shrink:0; margin-left:auto; opacity:.55; }
 .sit-title { font-size:14px; font-weight:600; color:var(--ink); line-height:1.4; }
 .sit-desc { font-size:12px; color:var(--ink-3); margin-top:2px; line-height:1.4; }
 .result-panel { margin-top:16px; background:var(--card); border-radius:var(--radius-lg); overflow:hidden; animation:fadeIn .2s ease; box-shadow:0 2px 8px rgba(0,0,0,.07); }
@@ -104,6 +106,18 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .badge-gray  { background:var(--card-2);   color:var(--ink-2); border:1px solid var(--line); }
 .result-title { font-size:16px; font-weight:700; color:var(--ink); line-height:1.3; }
 .result-body { padding:14px 16px 16px; }
+.msg-box { background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius); padding:13px 14px; margin-bottom:14px; }
+.msg-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; }
+.msg-label { font-size:12px; font-weight:700; color:var(--ink-2); }
+.msg-hint { font-size:11px; color:var(--ink-3); }
+.msg-textarea { width:100%; min-height:120px; padding:12px 13px; font-size:13px; line-height:1.65; font-family:inherit; color:var(--ink); background:var(--card); border:1.5px solid var(--line); border-radius:var(--radius-sm); outline:none; resize:vertical; transition:border-color .15s; }
+.msg-textarea:focus { border-color:var(--blue); }
+.msg-warn { font-size:11px; color:var(--amber); margin-top:7px; line-height:1.5; display:none; }
+.msg-warn.show { display:block; }
+.msg-copy-btn { width:100%; margin-top:10px; padding:12px 16px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:background .15s; }
+.msg-copy-btn:hover { background:var(--blue-d); }
+.msg-copy-btn:active { transform:scale(.98); }
+.msg-copy-btn.copied { background:var(--green); }
 .copy-btn-top { width:100%; margin-bottom:14px; padding:12px 16px; background:var(--blue); color:#fff; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:7px; transition:background .15s; }
 .copy-btn-top:hover { background:var(--blue-d); }
 .copy-btn-top:active { transform:scale(.98); }
@@ -172,10 +186,10 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .dis-alias { font-size:11px; color:var(--ink-3); margin-top:2px; }
 .dis-period { font-size:11px; color:var(--ink-3); margin-top:2px; }
 .grade-tag { font-size:11px; font-weight:700; padding:3px 8px; border-radius:10px; flex-shrink:0; margin-left:8px; }
-.g1 { background:#D4D6DA; color:#1A1D23; font-weight:800; }
-.g2 { background:#E0E2E6; color:#2E333D; font-weight:700; }
-.g3 { background:#EAECEF; color:#3D4451; font-weight:600; }
-.g4 { background:#F2F3F5; color:#6B7280; font-weight:500; }
+.g1 { background:#C9CCD2; color:#16191F; font-weight:700; }
+.g2 { background:#D5D8DE; color:#22262E; font-weight:700; }
+.g3 { background:#E1E4E9; color:#2E333D; font-weight:700; }
+.g4 { background:#E8EAED; color:#3D4451; font-weight:700; }
 .dis-detail { margin-top:12px; background:var(--card); border-radius:var(--radius); overflow:hidden; animation:fadeIn .2s ease; box-shadow:0 2px 8px rgba(0,0,0,.07); }
 .dis-detail-head { padding:13px 15px; background:var(--card-2); border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:8px; }
 .dis-detail-name { font-size:15px; font-weight:700; color:var(--ink); }
@@ -183,12 +197,12 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .days-label { font-size:11px; color:var(--blue); font-weight:700; margin-bottom:5px; text-transform:uppercase; letter-spacing:.04em; }
 .days-value { font-size:32px; font-weight:800; color:var(--blue); line-height:1.1; letter-spacing:-.02em; }
 .days-sub { font-size:11px; color:var(--ink-3); margin-top:3px; }
-.season-box { background:var(--amber-bg); border:1px solid var(--amber-border); border-radius:var(--radius); padding:14px; margin-bottom:16px; }
-.season-title { font-size:13px; font-weight:700; color:var(--amber); margin-bottom:9px; }
+.season-box { background:var(--card); border:1px solid var(--line); border-left:4px solid var(--amber); border-radius:var(--radius); padding:14px; margin-bottom:16px; }
+.season-title { font-size:13px; font-weight:700; color:var(--ink); margin-bottom:9px; }
 .season-pills { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:9px; }
-.season-pill { padding:5px 11px; border-radius:20px; font-size:12px; font-weight:600; background:#fff; border:1px solid var(--amber-border); color:#7C4006; cursor:pointer; transition:all .12s; }
-.season-pill:hover { background:var(--amber); color:#fff; }
-.season-tip { font-size:12px; color:#7C4006; line-height:1.5; }
+.season-pill { padding:5px 11px; border-radius:20px; font-size:12px; font-weight:600; background:var(--card-2); border:1px solid var(--line); color:var(--ink-2); cursor:pointer; transition:all .12s; }
+.season-pill:hover { background:var(--amber-bg); border-color:var(--amber-border); color:var(--amber); }
+.season-tip { font-size:12px; color:var(--ink-3); line-height:1.5; }
 .stats-hint { font-size:13px; color:var(--ink-3); line-height:1.6; margin-bottom:14px; }
 .filter-row { display:flex; gap:8px; margin-bottom:13px; }
 .filter-row select { flex:1; padding:9px 11px; font-size:13px; border:1.5px solid var(--line); border-radius:var(--radius-sm); background:var(--card); color:var(--ink); -webkit-appearance:none; outline:none; }
@@ -215,11 +229,11 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .stat-bottom { display:flex; justify-content:space-between; align-items:center; }
 .stat-days { font-size:12px; color:var(--ink-3); }
 .stat-detail-link { font-size:12px; color:var(--blue); font-weight:600; }
-.stat-prev { font-size:12px; color:var(--green); background:var(--green-bg); border-radius:var(--radius-sm); padding:8px 10px; margin-top:9px; line-height:1.5; }
+.stat-prev { font-size:12px; color:var(--ink-2); background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:8px 10px; margin-top:9px; line-height:1.5; }
 .error-box { background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:13px 14px; font-size:13px; color:#7A1810; line-height:1.6; }
 .empty-state { text-align:center; padding:36px 16px; color:var(--ink-3); font-size:13px; line-height:1.7; }
 .source-note { margin-top:20px; font-size:11px; color:var(--ink-3); text-align:center; line-height:1.6; }
-.credit-note { margin-top:28px; font-size:10px; color:var(--line-2); text-align:right; padding-right:4px; letter-spacing:.03em; user-select:none; }
+.credit-note { margin:32px 0 20px; font-size:11px; color:var(--ink-3); text-align:center; letter-spacing:.03em; user-select:none; opacity:.7; }
 </style>
 </head>
 <body>
@@ -227,7 +241,10 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 <div class="app-header">
 <div class="header-inner">
   <div class="header-top">
-    <div class="app-title" onclick="switchTab('situation')" style="cursor:pointer;">🛡️ 우리 아이 오늘 학교 쉬어도 되나요?</div>
+    <div class="app-brand" onclick="switchTab('situation')">
+      <div class="app-title">🛡️ 감염병 등교중지 안내</div>
+      <div class="app-subtitle">학부모용 출석인정 가이드</div>
+    </div>
     <div class="child-badge" id="child-badge" onclick="toggleDropdown()">
       <span class="child-badge-icon">👶</span>
       <span class="child-badge-name" id="badge-name">이름 입력</span>
@@ -254,10 +271,9 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 <div class="page active" id="tab-situation">
   <div class="hero-search">
     <div class="hero-search-inner">
-      <div class="hero-label">병명을 바로 검색하세요</div>
       <div class="hero-wrap">
         <span class="hero-ico">🔍</span>
-        <input type="text" id="main-search-input" placeholder="수두, 독감, 장염, 눈병, 볼거리..." oninput="mainSearch()" onfocus="document.querySelector('.hero-search-inner').style.borderColor='var(--blue)'" onblur="if(!document.getElementById('main-search-result').innerHTML.trim())document.querySelector('.hero-search-inner').style.borderColor=''" autocomplete="off">
+        <input type="text" id="main-search-input" placeholder="수두, 독감, 장염, 눈병, 볼거리..." oninput="mainSearch()" onfocus="document.querySelector('.hero-search-inner').style.borderColor='var(--blue)'" onblur="document.querySelector('.hero-search-inner').style.borderColor=''" autocomplete="off">
       </div>
       <div id="main-search-result"></div>
     </div>
@@ -286,7 +302,6 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
     <span class="sit-chevron">›</span>
   </button>
   <div id="result-area"></div>
-  <p class="credit-note">© 2026 최창훈</p>
 </div>
 
 <div class="page" id="tab-search">
@@ -312,7 +327,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
   <p class="stats-hint">아이들이 자주 걸리는 감염병의 연간 발생 순위입니다.<br>카드를 누르면 등교중지 기간과 예방 방법을 확인할 수 있습니다.</p>
   <div class="filter-row">
     <select id="stat-year">
-      <option value="2026">2026년 (집계 중)</option><option value="2025" selected>2025년</option><option value="2024">2024년</option>
+      
     </select>
     <button class="fetch-btn" onclick="fetchStats()" id="fetch-btn">조회</button>
   </div>
@@ -576,7 +591,15 @@ function showResult(type,el){
       <div class="result-stripe stripe-${type==='A'?'red':type==='B'?'amber':'gray'}"></div>
       <div class="result-head"><span class="result-badge ${r.badgeCls}">${r.badge}</span><div class="result-title">${r.title}</div></div>
       <div class="result-body">
-        <button class="copy-btn-top" id="copy-btn-${type}" onclick="copyMsg('${type}')">✉️ 담임 선생님께 보낼 문자 복사</button>
+        <div class="msg-box">
+          <div class="msg-header">
+            <span class="msg-label">✉️ 담임 선생님께 보낼 문자</span>
+            <span class="msg-hint">직접 수정할 수 있어요</span>
+          </div>
+          <textarea class="msg-textarea" id="msg-text-${type}" oninput="checkMsgBlanks('${type}')"></textarea>
+          <div class="msg-warn" id="msg-warn-${type}">💡 [ ] 안의 내용을 채워주세요</div>
+          <button class="msg-copy-btn" id="copy-btn-${type}" onclick="copyMsg('${type}')">📋 복사하기</button>
+        </div>
         ${inlineSearch}
         <div class="section-toggle" onclick="toggleSection('todo-${type}','arrow-todo-${type}')"><span class="section-toggle-title">✅ 지금 해야 할 일 (3단계)</span><span class="section-toggle-arrow open" id="arrow-todo-${type}">▼</span></div>
         <div class="section-collapsible default-open" id="todo-${type}"><div style="padding-bottom:12px">${steps}</div></div>
@@ -586,6 +609,8 @@ function showResult(type,el){
         <div class="section-collapsible" id="chk-${type}"><div class="checklist-box">${checks}<div class="check-feedback" id="chk-fb-${type}"></div></div></div>
       </div>
     </div>`;
+  /* 문자 미리보기 초기값 채우기 */
+  fillMsgText(type);
   document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function toggleSection(id,arrowId){
@@ -607,6 +632,7 @@ function showInlineDetail(escapedName){
   const d=DISEASES.find(x=>esc(x.n)===escapedName);
   if(!d)return;
   currentMsgDisease=d;
+  fillMsgText('A');
   document.getElementById('inline-search-input').value=d.n;
   document.getElementById('inline-result').innerHTML=`<div class="inline-detail"><div class="inline-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="inline-days">${d.ds}</div><div class="inline-days-sub">${d.d}</div><div class="inline-doc">📄 필요 서류: ${d.doc}${d.note?'<br>⚠️ '+d.note:''}</div></div>`;
 }
@@ -622,12 +648,47 @@ function toggleCheck(item,boxId){
   if(checked===total){fb.classList.add('ok');fb.textContent='✅ 모두 확인! 소견서를 담임 선생님께 제출하세요.';}
   else if(checked>0){fb.classList.add('warn');fb.textContent='⚠️ 체크되지 않은 항목이 있으면 출석인정이 안 될 수 있습니다.';}
 }
-function copyMsg(type){
-  const btn=document.getElementById('copy-btn-'+type);
+/* 문자 미리보기 채우기 — 선택된 병명이 있으면 반영 */
+function fillMsgText(type){
+  const ta=document.getElementById('msg-text-'+type);
+  if(!ta) return;
   let msg=(typeof RESULTS[type].getMsg==='function')?RESULTS[type].getMsg():(RESULTS[type].msg||'');
-  if(currentMsgDisease&&type==='A'){msg=`안녕하세요, 선생님. ${getChildLabel()} 어머니/아버지입니다.\n${currentMsgDisease.n}으로 진단받아 오늘(${todayStr()})부터 [종료일]까지 등교중지 예정입니다.\n${currentMsgDisease.doc}을 제출하겠습니다.`;}
-  if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>{btn.textContent='✅ 복사 완료! [종료일] 수정 후 전송하세요';btn.classList.add('copied');setTimeout(()=>{btn.textContent='✉️ 담임 선생님께 보낼 문자 복사';btn.classList.remove('copied');},4000);});}
-  else{alert('복사할 내용:\n\n'+msg);}
+  if(currentMsgDisease && type==='A'){
+    msg='안녕하세요, 선생님. '+getChildLabel()+' 어머니/아버지입니다.\n'
+      +currentMsgDisease.n+'으로 진단받아 오늘('+todayStr()+')부터 [종료일]까지 등교중지 예정입니다.\n'
+      +currentMsgDisease.doc+'을 제출하겠습니다.';
+  }
+  ta.value=msg;
+  checkMsgBlanks(type);
+}
+
+/* [ ] 미채움 안내 */
+function checkMsgBlanks(type){
+  const ta=document.getElementById('msg-text-'+type);
+  const warn=document.getElementById('msg-warn-'+type);
+  if(!ta||!warn) return;
+  const hasBlank=/\[[^\]]+\]/.test(ta.value);
+  warn.classList.toggle('show', hasBlank);
+}
+
+/* 복사 — textarea 내용 그대로 */
+function copyMsg(type){
+  const ta=document.getElementById('msg-text-'+type);
+  const btn=document.getElementById('copy-btn-'+type);
+  if(!ta) return;
+  const msg=ta.value;
+  const done=function(){
+    btn.textContent='✅ 복사되었습니다!';
+    btn.classList.add('copied');
+    setTimeout(function(){btn.textContent='📋 복사하기';btn.classList.remove('copied');},2500);
+  };
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(msg).then(done).catch(function(){
+      ta.select();document.execCommand('copy');done();
+    });
+  } else {
+    ta.select();document.execCommand('copy');done();
+  }
 }
 
 
@@ -647,7 +708,7 @@ function showHeroDetail(escapedName){
   if(!d)return;
   mainSelectedDisease=d;
   document.getElementById('main-search-input').value=d.n;
-  document.getElementById('main-search-result').innerHTML=`<div class="hero-detail"><div class="hero-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="hero-days">${d.ds}</div><div class="hero-days-sub">${d.d}</div><div class="hero-doc">📄 필요 서류: ${d.doc}</div>${d.note?'<div class="hero-note">⚠️ '+d.note+'</div>':''}<div class="hero-actions"><button class="hero-btn hero-btn-primary" onclick="applyDiseaseAndShowResult()">출석인정 안내 보기</button><button class="hero-btn hero-btn-secondary" onclick="copyMsgFromHero()">✉️ 문자 복사</button></div></div>`;
+  document.getElementById('main-search-result').innerHTML=`<div class="hero-detail"><div class="hero-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="hero-days">${d.ds}</div><div class="hero-days-sub">${d.d}</div><div class="hero-doc">📄 필요 서류: ${d.doc}</div>${d.note?'<div class="hero-note">⚠️ '+d.note+'</div>':''}<div class="hero-actions"><button class="hero-btn hero-btn-primary" onclick="applyDiseaseAndShowResult()">출석인정 안내 보기</button><button class="hero-btn hero-btn-secondary" onclick="copyMsgFromHero()">✉️ 문자 작성</button></div></div>`;
 }
 function applyDiseaseAndShowResult(){
   if(!mainSelectedDisease)return;
@@ -658,11 +719,8 @@ function applyDiseaseAndShowResult(){
   setTimeout(()=>{const input=document.getElementById('inline-search-input');if(input){input.value=mainSelectedDisease.n;showInlineDetail(esc(mainSelectedDisease.n));}document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'start'});},80);
 }
 function copyMsgFromHero(){
-  if(!mainSelectedDisease)return;
-  const d=mainSelectedDisease;
-  const msg=`안녕하세요, 선생님. ${getChildLabel()} 어머니/아버지입니다.\n${d.n}으로 진단받아 오늘(${todayStr()})부터 [종료일]까지 등교중지 예정입니다.\n${d.doc}을 제출하겠습니다.`;
-  if(navigator.clipboard){navigator.clipboard.writeText(msg).then(()=>alert('복사되었습니다!\n[종료일]을 수정 후 전송하세요.'));}
-  else{alert('복사할 내용:\n\n'+msg);}
+  /* 결과 화면으로 이동 — 미리보기에서 확인 후 복사 */
+  applyDiseaseAndShowResult();
 }
 
 
@@ -706,6 +764,49 @@ function renderSeasonBox(){
     +'<div class="season-tip">💡 '+s.tip+'</div>';
 }
 
+/* ━━ 연도 자동 관리 (A안 + D안) ━━ */
+const MIN_RESULTS = 3; /* 이 수 미만이면 집계 전으로 판단 */
+
+function currentYear(){ return new Date().getFullYear(); }
+function defaultYear(){ return currentYear() - 1; } /* 작년 = 완결 데이터 */
+
+/* 연도 드롭다운을 현재 날짜 기준으로 자동 생성 */
+function buildYearOptions(){
+  const sel=document.getElementById('stat-year');
+  if(!sel) return;
+  const now=currentYear();
+  const years=[now, now-1, now-2, now-3];
+  sel.innerHTML=years.map(function(y){
+    const label=(y===now)?(y+'년 (집계 중)'):(y+'년');
+    const selected=(y===defaultYear())?' selected':'';
+    return '<option value="'+y+'"'+selected+'>'+label+'</option>';
+  }).join('');
+}
+
+/* 데이터가 충분한지 판단 */
+function hasEnoughData(list){
+  return Array.isArray(list) && list.length >= MIN_RESULTS;
+}
+
+/* 데이터 조회 + 자동 폴백 — 요청 연도에 데이터 없으면 이전 연도로 */
+async function callStatsWithFallback(year, schoolOnly){
+  let y = Number(year);
+  const tried = [];
+  for(let i=0;i<3;i++){
+    try{
+      const list = await callStatsAPI(String(y), schoolOnly);
+      if(hasEnoughData(list)){
+        return { list: list, year: String(y), fellBack: tried.length>0, requested: String(year) };
+      }
+      tried.push(y);
+    }catch(e){
+      tried.push(y);
+    }
+    y = y - 1;
+  }
+  return { list: [], year: String(year), fellBack: false, requested: String(year) };
+}
+
 async function callStatsAPI(year, schoolOnly){
   /* Vercel 서버리스 함수 경유 — 연도별 감염병 발생 현황 */
   const url='/api/stats?year='+year;
@@ -747,10 +848,17 @@ async function fetchStats(){
   btn.disabled=true;btn.textContent='조회 중...';
   document.getElementById('stats-result').innerHTML='<div class="loading"><div class="loading-spinner"></div>발생 현황을 불러오는 중입니다...</div>';
   try{
-    const top5=(await callStatsAPI(year,true)).slice(0,5);
-    if(!top5.length){document.getElementById('stats-result').innerHTML='<div class="empty-state">해당 연도 발생 보고된 감염병이 없습니다.<br>연도를 변경해 보세요.</div>';return;}
+    const r=await callStatsWithFallback(year, true);
+    const top5=r.list.slice(0,5);
+    if(!top5.length){
+      document.getElementById('stats-result').innerHTML='<div class="empty-state">아직 집계된 자료가 없습니다.<br>다른 연도를 선택해 보세요.</div>';
+      return;
+    }
     const maxCnt=top5[0].cnt||1;
-    const header='<div class="top5-header"><div class="top5-title">아이들이 많이 걸린 감염병 TOP 5</div><div class="top5-period">'+year+'년 · 전국</div></div>';
+    const fallbackNote=r.fellBack
+      ? '<div class="notice-box amber" style="margin-bottom:12px">📌 '+r.requested+'년은 아직 집계 중이라 '+r.year+'년 자료를 보여드립니다.</div>'
+      : '';
+    const header='<div class="top5-header"><div class="top5-title">아이들이 많이 걸린 감염병 TOP 5</div><div class="top5-period">'+r.year+'년 · 전국</div></div>';
     const cards=top5.map(function(it,i){
       const pct=Math.round(it.cnt/maxCnt*100);
       const dis=DISEASES.find(function(d){return d.n.includes(it.name)||it.name.includes(d.n);});
@@ -771,7 +879,7 @@ async function fetchStats(){
         +'</div>';
     }).join('');
     const notice='<div class="notice-box blue" style="margin-top:4px">💡 카드를 누르면 해당 감염병의 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</div>';
-    document.getElementById('stats-result').innerHTML=header+cards+notice;
+    document.getElementById('stats-result').innerHTML=fallbackNote+header+cards+notice;
   }catch(e){
     document.getElementById('stats-result').innerHTML='<div class="error-box"><strong>발생 현황을 불러올 수 없습니다</strong><br><br>잠시 후 다시 시도하거나 연도를 변경해 보세요.<br>또는 <a href="https://dportal.kdca.go.kr" target="_blank" rel="noopener">질병관리청 감염병포털</a>에서 직접 확인하세요.<br><br><em>오류: '+String(e.message)+'</em></div><div class="notice-box blue" style="margin-top:12px">💡 상황별 안내·감염병 검색은 인터넷 없이도 정상 작동합니다.</div>';
   }finally{btn.disabled=false;btn.textContent='조회';}
@@ -791,7 +899,7 @@ window.addEventListener('pageshow', e => {
     switchTab(tab, false);
   }
 });
-loadChildInfo();renderList();renderBadge();
+loadChildInfo();renderList();renderBadge();buildYearOptions();
 /* 초기 진입 — URL 변경 없이 현재 탭을 history에 기록 */
 if(!history.state || !history.state.tab){
   history.replaceState({tab:'situation'}, '', location.pathname);
@@ -799,6 +907,7 @@ if(!history.state || !history.state.tab){
 loadOutbreakBanner();
 
 </script>
+<p class="credit-note">© 2026 최창훈</p>
 </div><!-- /app-wrap -->
 </body>
 </html>
