@@ -659,7 +659,9 @@ async function callStatsAPI(year,month){
   const directUrl='https://apis.data.go.kr/1790387/infectdiseasestats/infectdiseasestatsservice/getInfectdiseaseStats'
     +'?serviceKey='+encodeURIComponent(API_KEY)
     +'&pageNo=1&numOfRows=100&resultType=json&year='+year+'&month='+month;
+  console.log('[API 호출]', directUrl);
   const res=await fetch(directUrl,{mode:'cors',credentials:'omit'});
+  console.log('[API 응답]', res.status, res.headers.get('content-type'));
   if(!res.ok)throw new Error('HTTP '+res.status);
   const json=await res.json();
   const items=json?.response?.body?.items?.item||[];
@@ -687,7 +689,8 @@ async function fetchStats(){
     const notice='<div class="notice-box blue" style="margin-top:4px">💡 카드를 누르면 해당 감염병의 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</div>';
     document.getElementById('stats-result').innerHTML=header+cards+notice;
   }catch(e){
-    document.getElementById('stats-result').innerHTML='<div class="error-box"><strong>발생 현황을 불러올 수 없습니다</strong><br><br>잠시 후 다시 시도하거나 연도·월을 변경해 보세요.<br>또는 <a href="https://dportal.kdca.go.kr" target="_blank" rel="noopener">질병관리청 감염병포털</a>에서 직접 확인하세요.<br><br><em>오류: '+e.message+'</em></div><div class="notice-box blue" style="margin-top:12px">💡 상황별 안내·감염병 검색은 인터넷 없이도 정상 작동합니다.</div>';
+    console.error('[fetchStats 오류]', e.name, e.message, e.stack);
+    document.getElementById('stats-result').innerHTML='<div class="error-box"><strong>발생 현황을 불러올 수 없습니다</strong><br><br>잠시 후 다시 시도하거나 연도·월을 변경해 보세요.<br>또는 <a href="https://dportal.kdca.go.kr" target="_blank" rel="noopener">질병관리청 감염병포털</a>에서 직접 확인하세요.<br><br><em>오류: '+String(e.message)+'</em></div><div class="notice-box blue" style="margin-top:12px">💡 상황별 안내·감염병 검색은 인터넷 없이도 정상 작동합니다.</div>';
   }finally{btn.disabled=false;btn.textContent='조회';}
 }
 function goToDisease(escapedName){switchTab('search');setTimeout(()=>showDiseaseDetail(escapedName),80);}
