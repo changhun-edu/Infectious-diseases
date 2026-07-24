@@ -220,7 +220,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 <div class="app-header">
 <div class="header-inner">
   <div class="header-top">
-    <div class="app-title">🛡️ 우리 아이 오늘 학교 쉬어도 되나요?</div>
+    <div class="app-title" onclick="switchTab('situation')" style="cursor:pointer;">🛡️ 우리 아이 오늘 학교 쉬어도 되나요?</div>
     <div class="child-badge" id="child-badge" onclick="toggleDropdown()">
       <span class="child-badge-icon">👶</span>
       <span class="child-badge-name" id="badge-name">이름 입력</span>
@@ -322,7 +322,7 @@ const API_KEY='9e644bbc9679873e697c8e70127dc6c6d1073968698887cef1fc34aba8e0a36c'
 /* ▼ Cloudflare Workers URL을 배포 후 여기에 입력하세요
    예) 'https://disease-proxy.XXX.workers.dev'
    미입력 시 직접 호출을 시도하며 CORS 오류가 날 수 있습니다. */
-const PROXY_BASE = '';
+const PROXY_BASE = 'https://disease-proxy.sinarm605.workers.dev';
 
 /* 아이 정보 */
 let childInfo={name:'',grade:'',cls:''};
