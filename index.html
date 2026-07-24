@@ -322,7 +322,7 @@ const API_KEY='9e644bbc9679873e697c8e70127dc6c6d1073968698887cef1fc34aba8e0a36c'
 /* ▼ Cloudflare Workers URL을 배포 후 여기에 입력하세요
    예) 'https://disease-proxy.XXX.workers.dev'
    미입력 시 직접 호출을 시도하며 CORS 오류가 날 수 있습니다. */
-const PROXY_BASE = 'https://disease-proxy.sinarm605.workers.dev';
+const PROXY_BASE = 'https://infectious-diseases.vercel.app';
 
 /* 아이 정보 */
 let childInfo={name:'',grade:'',cls:''};
@@ -655,10 +655,11 @@ function showDiseaseDetail(escapedName){
 
 
 async function callStatsAPI(year,month){
-  /* Cloudflare Worker에 year/month만 전달 — Worker 내부에서 API_KEY로 호출 */
+  /* Vercel /api/stats 프록시를 경유해 질병관리청 API 호출 */
   const url = PROXY_BASE
-    ? `${PROXY_BASE}?year=${year}&month=${month}`
-    : `https://apis.data.go.kr/1790387/infectdiseasestats/infectdiseasestatsservice/getInfectdiseaseStats?serviceKey=${encodeURIComponent(API_KEY)}&pageNo=1&numOfRows=100&resultType=json&year=${year}&month=${month}`;
+    ? `${PROXY_BASE}/api/stats?year=${year}&month=${month}`
+    : null;
+  if(!url) throw new Error('PROXY_BASE가 설정되지 않았습니다. Vercel 배포 후 URL을 입력하세요.');
   const res=await fetch(url);if(!res.ok)throw new Error(`HTTP ${res.status}`);
   const json=await res.json();const items=json?.response?.body?.items?.item||[];
   return items.filter(it=>parseInt(it.cnt||0)>0).sort((a,b)=>parseInt(b.cnt||0)-parseInt(a.cnt||0));
