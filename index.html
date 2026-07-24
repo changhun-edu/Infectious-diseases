@@ -183,6 +183,12 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .days-label { font-size:11px; color:var(--blue); font-weight:700; margin-bottom:5px; text-transform:uppercase; letter-spacing:.04em; }
 .days-value { font-size:32px; font-weight:800; color:var(--blue); line-height:1.1; letter-spacing:-.02em; }
 .days-sub { font-size:11px; color:var(--ink-3); margin-top:3px; }
+.season-box { background:var(--amber-bg); border:1px solid var(--amber-border); border-radius:var(--radius); padding:14px; margin-bottom:16px; }
+.season-title { font-size:13px; font-weight:700; color:var(--amber); margin-bottom:9px; }
+.season-pills { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:9px; }
+.season-pill { padding:5px 11px; border-radius:20px; font-size:12px; font-weight:600; background:#fff; border:1px solid var(--amber-border); color:#7C4006; cursor:pointer; transition:all .12s; }
+.season-pill:hover { background:var(--amber); color:#fff; }
+.season-tip { font-size:12px; color:#7C4006; line-height:1.5; }
 .stats-hint { font-size:13px; color:var(--ink-3); line-height:1.6; margin-bottom:14px; }
 .filter-row { display:flex; gap:8px; margin-bottom:13px; }
 .filter-row select { flex:1; padding:9px 11px; font-size:13px; border:1.5px solid var(--line); border-radius:var(--radius-sm); background:var(--card); color:var(--ink); -webkit-appearance:none; outline:none; }
@@ -239,7 +245,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
   <div class="tab-bar">
     <button class="tab-btn active" onclick="switchTab('situation')">상황별 안내</button>
     <button class="tab-btn" onclick="switchTab('search')">전체 목록</button>
-    <button class="tab-btn" onclick="switchTab('stats')">요즘 유행</button>
+    <button class="tab-btn" onclick="switchTab('stats')">감염병 통계</button>
   </div>
 </div><!-- /header-inner -->
 </div><!-- /app-header -->
@@ -258,7 +264,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
   </div>
   <div class="outbreak-banner" id="outbreak-banner" style="display:none">
     <div class="outbreak-header">
-      <span class="outbreak-label">요즘 유행 중</span>
+      <span class="outbreak-label">이번 달 조심할 감염병</span>
       <span class="outbreak-period" id="outbreak-period"></span>
     </div>
     <div class="outbreak-pills" id="outbreak-pills"></div>
@@ -302,7 +308,8 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 </div>
 
 <div class="page" id="tab-stats">
-  <p class="stats-hint">전국에서 가장 많이 발생한 감염병 TOP 5입니다.<br>카드를 누르면 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</p>
+  <div class="season-box" id="season-box"></div>
+  <p class="stats-hint">아이들이 자주 걸리는 감염병의 연간 발생 순위입니다.<br>카드를 누르면 등교중지 기간과 예방 방법을 확인할 수 있습니다.</p>
   <div class="filter-row">
     <select id="stat-year">
       <option value="2024">2024년</option><option value="2023">2023년</option><option value="2022">2022년</option>
@@ -455,6 +462,34 @@ const DISEASES = [
   {g:4,n:"유행성각결막염",a:["눈병","눈꼽","아폴로눈병","결막염"],ds:"통상 1~2주 (소견서 기준 우선)",d:"의사소견서에 기재된 기간 (통상 2주 내외)",doc:"의사소견서",prev:"손으로 눈을 만지지 않고 수건을 따로 쓰세요",note:"학교 내 유행 잦음"},
 ];
 /* TODOS not found */
+/* 월별 주의 감염병 — 질병관리청 계절별 발생 특성 기준 */
+const SEASONAL = {
+  1:{label:'겨울',list:['인플루엔자','장관감염증','A형간염'],tip:'실내 환기와 손 씻기가 중요합니다'},
+  2:{label:'겨울',list:['인플루엔자','장관감염증','유행성이하선염'],tip:'새 학기 전 예방접종을 확인하세요'},
+  3:{label:'봄',list:['유행성이하선염','수두','홍역'],tip:'새 학기 집단생활 시작 — 예방접종 확인'},
+  4:{label:'봄',list:['수두','유행성이하선염','성홍열'],tip:'단체 활동이 늘어나는 시기입니다'},
+  5:{label:'봄',list:['수족구병','수두','성홍열'],tip:'수족구병이 늘기 시작합니다'},
+  6:{label:'초여름',list:['수족구병','유행성각결막염','장관감염증'],tip:'수족구병 유행 절정기입니다'},
+  7:{label:'여름',list:['수족구병','유행성각결막염','장관감염증'],tip:'물놀이 후 눈병·장염을 조심하세요'},
+  8:{label:'여름',list:['유행성각결막염','장관감염증','수족구병'],tip:'음식 관리와 손 씻기를 철저히'},
+  9:{label:'가을',list:['유행성각결막염','장관감염증','인플루엔자'],tip:'독감 예방접종 시작 시기입니다'},
+  10:{label:'가을',list:['인플루엔자','장관감염증','급성호흡기감염증'],tip:'독감 예방접종을 서두르세요'},
+  11:{label:'늦가을',list:['인플루엔자','급성호흡기감염증','장관감염증'],tip:'환절기 호흡기 감염병 주의'},
+  12:{label:'겨울',list:['인플루엔자','장관감염증','급성호흡기감염증'],tip:'실내 밀집 환경 — 환기가 중요합니다'}
+};
+
+/* 학령기 아동에게 흔한 감염병 — 통계 필터용 */
+const SCHOOL_DISEASES = [
+  '수두','유행성이하선염','볼거리','홍역','풍진','성홍열','수족구병',
+  '인플루엔자','독감','장관감염증','노로','유행성각결막염','결막염',
+  '백일해','A형간염','급성호흡기감염증','엔테로바이러스','폐렴구균',
+  '수막구균','b형헤모필루스','결핵','유행성출혈열','장출혈성대장균'
+];
+function isSchoolDisease(name){
+  if(!name) return false;
+  return SCHOOL_DISEASES.some(function(k){ return name.includes(k); });
+}
+
 const TODOS={
   A:[
     {t:"병원에서 소견서 발급 요청",s:"진단명과 등교중지 기간(시작일~종료일)이 모두 적힌 서류"},
@@ -519,7 +554,7 @@ function switchTab(id, pushState=true){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   if(id==='search')renderList();
-  if(id==='stats')fetchStats();
+  if(id==='stats'){renderSeasonBox();fetchStats();}
   /* URL 해시 없이 history state만 기록 */
   if(pushState) history.pushState({tab:id}, '', location.pathname);
 }
@@ -652,7 +687,26 @@ function showDiseaseDetail(escapedName){
 }
 
 
-async function callStatsAPI(year){
+
+/* 이번 달 주의 감염병 렌더 */
+function renderSeasonBox(){
+  const box=document.getElementById('season-box');
+  if(!box) return;
+  const m=new Date().getMonth()+1;
+  const s=SEASONAL[m];
+  if(!s) return;
+  const pills=s.list.map(function(name){
+    const dis=DISEASES.find(function(d){ return d.n.includes(name)||name.includes(d.n)||d.a.some(function(a){return a===name;}); });
+    const onclick=dis?("goToDisease('"+esc(dis.n)+"')"):"switchTab('search')";
+    const days=dis?(' · '+dis.ds):'';
+    return '<span class="season-pill" onclick="'+onclick+'">'+name+'</span>';
+  }).join('');
+  box.innerHTML='<div class="season-title">🗓️ '+m+'월에 조심할 감염병 ('+s.label+')</div>'
+    +'<div class="season-pills">'+pills+'</div>'
+    +'<div class="season-tip">💡 '+s.tip+'</div>';
+}
+
+async function callStatsAPI(year, schoolOnly){
   /* Vercel 서버리스 함수 경유 — 연도별 감염병 발생 현황 */
   const url='/api/stats?year='+year;
   const res=await fetch(url);
@@ -660,26 +714,32 @@ async function callStatsAPI(year){
   const json=await res.json();
   if(json.ok===false) throw new Error(json.error||json.snippet||'API 오류');
   const items=json?.response?.body?.items?.item||[];
-  /* 필드: year, patntType, icdGroupNm, icdNm, resultVal
-     '계' 항목만 사용, 발생 0 제외, 내림차순 정렬 */
-  return items
-    .filter(it=>it.patntType==='계' && parseInt(it.resultVal||0)>0)
-    .map(it=>({name:(it.icdNm||'').trim(), cnt:parseInt(it.resultVal||0), grade:it.icdGroupNm||''}))
-    .sort((a,b)=>b.cnt-a.cnt);
+  /* 필드: year, patntType, icdGroupNm, icdNm, resultVal */
+  let list=items
+    .filter(function(it){ return it.patntType==='계' && parseInt(it.resultVal||0)>0; })
+    .map(function(it){ return {name:(it.icdNm||'').trim(), cnt:parseInt(it.resultVal||0), grade:it.icdGroupNm||''}; });
+  /* 학령기 감염병만 필터 */
+  if(schoolOnly){
+    const filtered=list.filter(function(it){ return isSchoolDisease(it.name); });
+    if(filtered.length) list=filtered;
+  }
+  return list.sort(function(a,b){ return b.cnt-a.cnt; });
 }
-async function loadOutbreakBanner(){
-  const year='2024';
-  try{
-    const top5=(await callStatsAPI(year)).slice(0,5);
-    if(!top5.length)return;
-    document.getElementById('outbreak-period').textContent=year+'년 · 전국';
-    document.getElementById('outbreak-pills').innerHTML=top5.map(function(it){
-      const dis=DISEASES.find(function(d){return d.n.includes(it.name)||it.name.includes(d.n);});
-      const onclick=dis?("goToDisease('"+esc(dis.n)+"')"):"switchTab('search')";
-      return '<span class="outbreak-pill" onclick="'+onclick+'">'+it.name+' <span class="outbreak-num">'+it.cnt.toLocaleString()+'명</span></span>';
-    }).join('');
-    document.getElementById('outbreak-banner').style.display='block';
-  }catch(e){}
+function loadOutbreakBanner(){
+  /* 계절 기반 — API 없이도 항상 표시 */
+  const m=new Date().getMonth()+1;
+  const s=SEASONAL[m];
+  if(!s) return;
+  const el=document.getElementById('outbreak-period');
+  if(el) el.textContent=m+'월 · '+s.label;
+  const pills=s.list.map(function(name){
+    const dis=DISEASES.find(function(d){ return d.n.includes(name)||name.includes(d.n)||d.a.some(function(a){return a===name;}); });
+    const onclick=dis?("goToDisease('"+esc(dis.n)+"')"):"switchTab('search')";
+    const days=dis?('<span class="outbreak-num">'+dis.ds+'</span>'):'';
+    return '<span class="outbreak-pill" onclick="'+onclick+'">'+name+' '+days+'</span>';
+  }).join('');
+  document.getElementById('outbreak-pills').innerHTML=pills;
+  document.getElementById('outbreak-banner').style.display='block';
 }
 async function fetchStats(){
   const year=document.getElementById('stat-year').value;
@@ -687,10 +747,10 @@ async function fetchStats(){
   btn.disabled=true;btn.textContent='조회 중...';
   document.getElementById('stats-result').innerHTML='<div class="loading"><div class="loading-spinner"></div>발생 현황을 불러오는 중입니다...</div>';
   try{
-    const top5=(await callStatsAPI(year)).slice(0,5);
+    const top5=(await callStatsAPI(year,true)).slice(0,5);
     if(!top5.length){document.getElementById('stats-result').innerHTML='<div class="empty-state">해당 연도 발생 보고된 감염병이 없습니다.<br>연도를 변경해 보세요.</div>';return;}
     const maxCnt=top5[0].cnt||1;
-    const header='<div class="top5-header"><div class="top5-title">가장 많이 발생한 감염병 TOP 5</div><div class="top5-period">'+year+'년 · 전국</div></div>';
+    const header='<div class="top5-header"><div class="top5-title">아이들이 많이 걸린 감염병 TOP 5</div><div class="top5-period">'+year+'년 · 전국</div></div>';
     const cards=top5.map(function(it,i){
       const pct=Math.round(it.cnt/maxCnt*100);
       const dis=DISEASES.find(function(d){return d.n.includes(it.name)||it.name.includes(d.n);});
