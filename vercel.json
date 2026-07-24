@@ -1,0 +1,9 @@
+{
+  "regions": ["icn1"],
+  "functions": {
+    "api/stats.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
+  }
+}
