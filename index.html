@@ -303,7 +303,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 <div class="page" id="tab-stats">
   <p class="stats-hint">이번 달 전국에서 가장 많이 발생한 감염병 TOP 5입니다.<br>카드를 누르면 등교중지 기간과 필요 서류를 바로 확인할 수 있습니다.</p>
   <div class="filter-row">
-    <select id="stat-year"><option value="2026">2026년</option><option value="2025">2025년</option><option value="2024">2024년</option></select>
+    <select id="stat-year"><option value="2025">2025년</option><option value="2024">2024년</option><option value="2023">2023년</option></select>
     <select id="stat-month">
       <option value="01">1월</option><option value="02">2월</option><option value="03">3월</option>
       <option value="04">4월</option><option value="05">5월</option><option value="06">6월</option>
@@ -687,12 +687,9 @@ async function fetchStats(){
   }catch(e){
     document.getElementById('stats-result').innerHTML=`<div class="error-box">
       <strong>발생 현황을 불러올 수 없습니다</strong><br><br>
-      브라우저 보안 정책(CORS)으로 인해 GitHub Pages 등 정적 웹페이지에서는 공공데이터 API를 직접 호출할 수 없습니다.<br><br>
-      <strong>해결 방법 (무료, 5분 소요)</strong><br>
-      ① <a href="https://workers.cloudflare.com" target="_blank" rel="noopener">workers.cloudflare.com</a> 무료 가입<br>
-      ② "Create Worker" → <code>cf-worker.js</code> 내용 붙여넣기 → 배포<br>
-      ③ 발급된 Worker URL을 <code>index.html</code>의 <code>PROXY_BASE</code>에 입력<br><br>
-      또는 <a href="https://dportal.kdca.go.kr" target="_blank" rel="noopener">질병관리청 감염병포털</a>에서 직접 확인하세요.
+      잠시 후 다시 시도하거나 연도·월을 변경해 보세요.<br>
+      또는 <a href="https://dportal.kdca.go.kr" target="_blank" rel="noopener">질병관리청 감염병포털</a>에서 직접 확인하세요.<br><br>
+      <em>오류: \${e.message}</em>
     </div>
     <div class="notice-box blue" style="margin-top:12px">💡 상황별 안내·감염병 검색은 인터넷 없이도 정상 작동합니다.</div>`;
   }finally{btn.disabled=false;btn.textContent='조회';}
@@ -713,7 +710,8 @@ window.addEventListener('pageshow', e => {
   }
 });
 loadChildInfo();renderList();renderBadge();
-const _n=new Date(),_y=String(_n.getFullYear()),_m=String(_n.getMonth()+1).padStart(2,'0');
+/* 공공데이터포털은 전월까지만 집계 — 현재연도 데이터 없을 수 있어 2025 기본 */
+const _n=new Date(),_y='2025',_m=String(_n.getMonth()+1).padStart(2,'0');
 for(let o of document.getElementById('stat-year').options){if(o.value===_y){o.selected=true;break;}}
 for(let o of document.getElementById('stat-month').options){if(o.value===_m){o.selected=true;break;}}
 /* 초기 진입 — URL 변경 없이 현재 탭을 history에 기록 */
