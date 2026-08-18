@@ -247,7 +247,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 <div class="app-header">
 <div class="header-inner">
   <div class="header-top">
-    <div class="app-brand" onclick="switchTab('situation')">
+    <div class="app-brand" onclick="goHome()">
       <div class="app-title">🛡️ 감염병 등교중지 안내</div>
       <div class="app-subtitle">학부모용 출석인정 가이드</div>
     </div>
@@ -588,6 +588,36 @@ function switchTab(id, pushState=true){
   if(pushState) history.pushState({tab:id}, '', location.pathname);
 }
 
+/* ━━ 고정 헤더 높이를 뺀 위치로 스크롤 ━━
+   헤더가 sticky라 그냥 scrollIntoView 하면 제목이 헤더에 가려진다. */
+function headerOffset(){
+  const h=document.querySelector('.app-header');
+  return (h?h.getBoundingClientRect().height:0)+12;
+}
+function scrollToEl(el){
+  if(!el) return;
+  const y=el.getBoundingClientRect().top+window.pageYOffset-headerOffset();
+  window.scrollTo({top:y<0?0:y, behavior:'smooth'});
+}
+
+/* ━━ 로고를 누르면 첫 화면으로 ━━ */
+function goHome(){
+  closeDropdown();
+  switchTab('situation');
+  /* 선택했던 상황·검색 결과를 지워 처음 상태로 되돌린다 */
+  document.querySelectorAll('.sit-card').forEach(c=>c.classList.remove('active'));
+  const ra=document.getElementById('result-area');
+  if(ra) ra.innerHTML='';
+  const mi=document.getElementById('main-search-input');
+  if(mi) mi.value='';
+  const mr=document.getElementById('main-search-result');
+  if(mr) mr.innerHTML='';
+  mainSelectedDisease=null;
+  currentMsgType=null;currentMsgDisease=null;
+  renderRecent();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
 
 /* 결과 패널 */
 let currentMsgType=null,currentMsgDisease=null;
@@ -625,7 +655,8 @@ function showResult(type,el){
     </div>`;
   /* 문자 미리보기 초기값 채우기 */
   fillMsgText(type);
-  document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'start'});
+  /* 결과 제목(배지)이 고정 헤더에 가리지 않도록 헤더 높이만큼 띄워 이동 */
+  requestAnimationFrame(function(){ scrollToEl(document.getElementById('result-area')); });
 }
 function toggleSection(id,arrowId){
   const el=document.getElementById(id),arrow=document.getElementById(arrowId);
@@ -771,7 +802,7 @@ function applyDiseaseAndShowResult(){
   sitCards.forEach(c=>c.classList.remove('active'));
   sitCards[0].classList.add('active');
   showResult('A',sitCards[0]);
-  setTimeout(()=>{const input=document.getElementById('inline-search-input');if(input){input.value=mainSelectedDisease.n;showInlineDetail(esc(mainSelectedDisease.n));}document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'start'});},80);
+  setTimeout(()=>{const input=document.getElementById('inline-search-input');if(input){input.value=mainSelectedDisease.n;showInlineDetail(esc(mainSelectedDisease.n));}scrollToEl(document.getElementById('result-area'));},80);
 }
 function copyMsgFromHero(){
   /* 결과 화면으로 이동 — 미리보기에서 확인 후 복사 */
@@ -812,7 +843,7 @@ function showDiseaseDetail(escapedName){
   const alias=d.a.length?`<div class="info-row"><span class="info-lbl">다른 이름</span><span class="info-val">${d.a.join(', ')}</span></div>`:'';
   document.getElementById('dis-detail').innerHTML=`<div class="dis-detail"><div class="dis-detail-head"><div class="dis-detail-name">${d.n}</div><span class="grade-tag g${d.g}">${d.g}급</span></div><div class="result-body"><div class="days-highlight"><div class="days-label">등교중지 기간</div><div class="days-value">${d.ds}</div><div class="days-sub">${d.d}</div></div>${endDateText(d)?`<div class="hero-return">🏫 오늘 진단 기준 <strong>${endDateText(d)}</strong>부터 등교 가능<div class="hero-return-note">소견서 기간이 다르면 그 기간을 따릅니다</div></div>`:''}<div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val ok">✅ 가능 (법정 감염병)</span></div><div class="info-row"><span class="info-lbl">급 특성</span><span class="info-val">${gradeDesc[d.g]}</span></div>${alias}<div class="info-row"><span class="info-lbl">필요 서류</span><span class="info-val">${d.doc}</span></div>${d.note?`<div class="info-row"><span class="info-lbl">참고</span><span class="info-val warn">⚠️ ${d.note}</span></div>`:''}
         ${d.prev?`<div class="info-row"><span class="info-lbl">예방 방법</span><span class="info-val">💡 ${d.prev}</span></div>`:''}<div class="notice-box amber">📋 소견서에 반드시 <strong>진단명(${d.n})</strong>과 <strong>등교중지 기간</strong>이 함께 기재되어야 출석 인정이 됩니다.</div></div></div>`;
-  document.getElementById('dis-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
+  requestAnimationFrame(function(){ scrollToEl(document.getElementById('dis-detail')); });
 }
 
 
