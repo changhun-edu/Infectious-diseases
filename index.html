@@ -238,6 +238,17 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .stat-prev { font-size:12px; color:var(--ink-2); background:var(--card-2); border:1px solid var(--line); border-radius:var(--radius-sm); padding:8px 10px; margin-top:9px; line-height:1.5; }
 .error-box { background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius-sm); padding:13px 14px; font-size:13px; color:#7A1810; line-height:1.6; }
 .empty-state { text-align:center; padding:36px 16px; color:var(--ink-3); font-size:13px; line-height:1.7; }
+/* 법정 감염병 목록에 없는 검색어 안내 (파란 박스) */
+.nomatch-sugg { margin:10px 0 8px; }
+.nomatch-sugg-lbl { font-size:12px; color:var(--ink-3); margin-bottom:6px; }
+.nomatch-pill { display:inline-block; padding:6px 12px; margin:0 6px 6px 0; background:var(--card); border:1px solid var(--line-2); border-radius:16px; font-size:13px; font-weight:600; color:var(--ink-2); cursor:pointer; transition:all .12s; }
+.nomatch-pill:hover { border-color:var(--blue); color:var(--blue); }
+.nomatch-box { background:var(--blue-bg); border:1px solid var(--blue-border); border-radius:var(--radius); padding:16px 15px; margin:10px 0 4px; text-align:left; }
+.nomatch-title { font-size:17px; font-weight:800; color:#123E9E; line-height:1.35; letter-spacing:-.01em; }
+.nomatch-query { display:inline-block; margin-top:7px; font-size:12px; font-weight:600; color:#3A5DA8; background:var(--card); border:1px solid var(--blue-border); border-radius:14px; padding:3px 10px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:bottom; }
+.nomatch-body { font-size:13px; color:#1240A0; line-height:1.7; margin-top:9px; }
+.nomatch-body strong { font-weight:700; }
+.nomatch-note { margin-top:12px; padding-top:10px; border-top:1px solid var(--blue-border); font-size:12px; color:#3A5DA8; line-height:1.75; }
 .source-note { margin-top:20px; font-size:11px; color:var(--ink-3); text-align:center; line-height:1.6; }
 .credit-note { margin:32px 0 20px; font-size:11px; color:var(--ink-3); text-align:center; letter-spacing:.03em; user-select:none; opacity:.7; }
 </style>
@@ -393,6 +404,53 @@ function formatDate(d){return`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.get
 function todayStr(){return formatDate(new Date());}
 function nextWeekStr(){const d=new Date();d.setDate(d.getDate()+7);return formatDate(d);}
 function esc(s){return s.replace(/['"()]/g,'_');}
+/* 화면에 검색어를 그대로 출력할 때 쓰는 HTML 이스케이프 */
+function escHtml(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+/* 오타·유사 병명 후보 찾기 — 2글자 단위로 겹치는 병명을 점수화 */
+function findSimilar(q){
+  if(!q||q.length<2) return [];
+  const grams=[];
+  for(let i=0;i<q.length-1;i++) grams.push(q.substr(i,2));
+  return DISEASES.map(function(d){
+    const hay=[d.n].concat(d.a).join(' ');
+    let s=0; grams.forEach(function(g){ if(hay.indexOf(g)>-1) s++; });
+    return {d:d,s:s};
+  }).filter(function(x){return x.s>0;})
+   .sort(function(a,b){return b.s-a.s;})
+   .slice(0,3).map(function(x){return x.d;});
+}
+/* 법정 감염병 목록에 없을 때 보여줄 안내 — handler는 후보 클릭 시 호출할 함수 이름 */
+function noMatchHtml(q,handler){
+  const sims=findSimilar(q);
+  const sugg=sims.length
+    ? '<div class="nomatch-sugg"><div class="nomatch-sugg-lbl">혹시 이걸 찾으셨나요?</div>'
+      + sims.map(function(d){return '<span class="nomatch-pill" onclick="'+handler+'(\''+esc(d.n)+'\')">'+escHtml(d.n)+'</span>';}).join('')
+      + '</div>'
+    : '';
+  return sugg
+    + '<div class="nomatch-box">'
+    +   '<div class="nomatch-title">등교중지 대상이 아닙니다</div>'
+    +   '<div class="nomatch-query">🔍 ' + escHtml(q) + '</div>'
+    +   '<div class="nomatch-body">'
+    +     '입력하신 이름은 법정 감염병이 아니어서 <strong>출석인정결석 대상이 아닙니다.</strong><br>'
+    +     '아파서 결석하는 경우 일반 <strong>질병결석</strong>으로 처리되며, 학교 규정에 따라 진단서·학부모 확인서가 필요할 수 있습니다.'
+    +   '</div>'
+    +   '<div class="nomatch-note">'
+    +     '· 오타이거나 다른 이름으로 등록되어 있을 수 있어요.<br>'
+    +     '· 의사가 등교중지 소견을 낸 경우에는 그 소견을 따릅니다.<br>'
+    +     '· 자세한 결석 처리는 담임 선생님께 문의하세요.'
+    +   '</div>'
+    + '</div>';
+}
+/* 감염병 목록 탭에서 후보를 눌렀을 때 — 검색어를 바꾸고 목록·상세를 다시 그린다 */
+function pickSuggestion(escapedName){
+  const d=DISEASES.find(function(x){return esc(x.n)===escapedName;});
+  if(!d)return;
+  const inp=document.getElementById('search-input');
+  if(inp) inp.value=d.n;
+  renderList();
+  showDiseaseDetail(escapedName);
+}
 
 const DISEASES = [
   /* 1급 (18종) */
@@ -748,7 +806,7 @@ function inlineSearch(){
   currentMsgDisease=null;
   if(!q){res.innerHTML='';return;}
   const list=DISEASES.filter(d=>d.n.includes(q)||d.a.some(a=>a.includes(q)||q.includes(a))).slice(0,5);
-  if(!list.length){res.innerHTML=`<div style="font-size:12px;color:var(--ink-3);padding:8px 0">검색 결과가 없습니다.</div>`;return;}
+  if(!list.length){res.innerHTML=noMatchHtml(q,'showInlineDetail');return;}
   res.innerHTML=list.map(d=>`<div class="inline-dis-item" onclick="showInlineDetail('${esc(d.n)}')"><div><div class="inline-dis-name">${d.n}</div><div class="inline-dis-period">${d.ds}</div></div><span class="grade-tag g${d.g}">${d.g}급</span></div>`).join('');
 }
 function showInlineDetail(escapedName){
@@ -861,7 +919,7 @@ function mainSearch(){
   mainSelectedDisease=null;
   if(!q){res.innerHTML='';return;}
   const list=DISEASES.filter(d=>d.n.includes(q)||d.a.some(a=>a.includes(q)||q.includes(a))).slice(0,6);
-  if(!list.length){res.innerHTML='<div style="font-size:12px;color:var(--ink-3);padding:8px 4px">검색 결과가 없습니다.</div>';return;}
+  if(!list.length){res.innerHTML=noMatchHtml(q,'showHeroDetail');return;}
   res.innerHTML='<div class="hero-list">'+list.map(d=>`<div class="hero-item" onclick="showHeroDetail('${esc(d.n)}')"><div><div class="hero-item-name">${d.n}</div><div class="hero-item-period">${d.ds}</div></div><span class="grade-tag g${d.g}">${d.g}급</span></div>`).join('')+'</div>';
 }
 function showHeroDetail(escapedName){
@@ -906,7 +964,18 @@ function renderList(){
     if(sa!==sb) return sa-sb;
     return a.g-b.g;
   });
-  if(!list.length){document.getElementById('dis-list').innerHTML='<div class="empty-state">검색 결과가 없습니다.<br>다른 이름으로 검색해 보세요.</div>';return;}
+  if(!list.length){
+    /* 급수 필터 때문에 비었는지, 정말 목록에 없는 이름인지 구분한다 */
+    const inOtherGrade = q && DISEASES.some(function(d){
+      return d.n.includes(q)||d.a.some(function(a){return a.includes(q)||q.includes(a);});
+    });
+    let html;
+    if(!q) html='<div class="empty-state">해당하는 감염병이 없습니다.<br>다른 급수를 선택해 보세요.</div>';
+    else if(inOtherGrade) html='<div class="empty-state">선택한 급수에는 없습니다.<br>\'전체\'를 눌러 다시 검색해 보세요.</div>';
+    else html=noMatchHtml(q,'pickSuggestion');
+    document.getElementById('dis-list').innerHTML=html;
+    return;
+  }
   document.getElementById('dis-list').innerHTML=list.map(function(d){
     const alias=d.a.length?('<div class="dis-alias">별칭: '+d.a.join(', ')+'</div>'):'';
     const mark=isSchoolDisease(d.n)?'<span class="dis-common">자주</span>':'';
