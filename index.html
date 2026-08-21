@@ -175,6 +175,18 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
 .check-feedback { font-size:12px; font-weight:600; margin-top:10px; padding-top:10px; border-top:1px solid var(--line); display:none; }
 .check-feedback.warn { display:block; color:var(--red); }
 .check-feedback.ok   { display:block; color:var(--green); }
+.home-rules { padding-bottom:12px; }
+.home-when { background:var(--blue-bg); border:1px solid var(--blue-border); border-radius:var(--radius-sm); padding:10px 13px; font-size:12.5px; color:#1240A0; line-height:1.5; margin-bottom:10px; }
+.home-when strong { font-weight:800; }
+.home-lead { font-size:11.5px; color:var(--ink-3); margin-bottom:8px; }
+.home-item { display:flex; gap:8px; padding:7px 0; font-size:12.5px; line-height:1.65; color:var(--ink-2); border-bottom:1px dashed var(--line); }
+.home-item:last-child { border-bottom:none; }
+.home-ico { flex-shrink:0; font-size:13px; line-height:1.55; }
+.home-item.hl { color:var(--ink); font-weight:600; }
+.home-tag { display:inline-block; font-size:10px; font-weight:700; border-radius:9px; padding:1px 6px; margin-left:5px; vertical-align:middle; }
+.home-tag.on { color:#1240A0; background:var(--blue-bg); border:1px solid var(--blue-border); }
+.home-tag.off { color:#7C4006; background:var(--amber-bg); border:1px solid var(--amber-border); }
+.home-src { font-size:10.5px; color:var(--ink-3); margin-top:10px; padding-top:9px; border-top:1px solid var(--line); line-height:1.55; }
 .search-wrap { position:relative; margin-bottom:8px; max-width:480px; }
 .search-wrap input { width:100%; padding:12px 14px 12px 40px; font-size:14px; border:1.5px solid var(--line); border-radius:var(--radius); background:var(--card); color:var(--ink); outline:none; -webkit-appearance:none; }
 .search-wrap input:focus { border-color:var(--blue); }
@@ -331,7 +343,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
   </div>
   <p class="search-hint">일상 병명으로도 검색됩니다 (독감, 장염, 눈병, 볼거리, 뇌수막염 등)</p>
   <div class="grade-filter">
-    <button class="grade-btn active" onclick="setGrade('all',this)">전체 (90종)</button>
+    <button class="grade-btn active" onclick="setGrade('all',this)">전체 (92종)</button>
     <button class="grade-btn" onclick="setGrade('1',this)">1급</button>
     <button class="grade-btn" onclick="setGrade('2',this)">2급</button>
     <button class="grade-btn" onclick="setGrade('3',this)">3급</button>
@@ -339,7 +351,7 @@ body { font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgu
   </div>
   <div class="dis-list" id="dis-list"></div>
   <div id="dis-detail"></div>
-  <p class="source-note">※ 감염병예방법 2026.1.1. 기준 90종 · 법 개정 시 목록이 변경될 수 있습니다.</p>
+  <p class="source-note">※ 등교중지 기간은 교육부 「학교 감염병 예방·위기대응 매뉴얼 제3차 개정판」 기준입니다.<br>방역당국이 별도 관리지침을 제시하면 그 지침을 우선 적용합니다 · 법 개정 시 목록이 변경될 수 있습니다.</p>
 </div>
 
 <div class="page" id="tab-stats">
@@ -454,99 +466,101 @@ function pickSuggestion(escapedName){
 
 const DISEASES = [
   /* 1급 (18종) */
-  {g:1,n:"에볼라바이러스병",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:"즉시 방역당국 신고 필요"},
-  {g:1,n:"마버그열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"라싸열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"크리미안콩고출혈열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"남아메리카출혈열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"리프트밸리열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"두창",a:["천연두"],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:"즉시 방역당국 신고 필요"},
-  {g:1,n:"페스트",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"탄저",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"보툴리눔독소증",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
+  {g:1,n:"에볼라바이러스병",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",mk:1,doc:"방역당국 확인서",note:"즉시 방역당국 신고 필요"},
+  {g:1,n:"마버그열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"라싸열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"크리미안콩고출혈열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"남아메리카출혈열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"리프트밸리열",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"두창",a:["천연두"],ds:"딱지가 모두 떨어질 때까지",d:"피부 병변의 모든 딱지가 떨어질 때까지",mk:1,doc:"방역당국 확인서",note:"즉시 방역당국 신고 필요"},
+  {g:1,n:"페스트",a:[],ds:"모든 증상이 사라질 때까지",d:"모든 증상이 소실될 때까지",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"탄저",a:[],ds:"앓는 기간 내내",d:"이환기간 내내",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"보툴리눔독소증",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
   {g:1,n:"야토병",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
   {g:1,n:"신종감염병증후군",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"중증급성호흡기증후군(SARS)",a:["사스"],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"중동호흡기증후군(MERS)",a:["메르스"],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"동물인플루엔자 인체감염증",a:["조류독감","조류인플루엔자"],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:""},
-  {g:1,n:"신종인플루엔자",a:["신종플루"],ds:"열이 내린 뒤 최소 1일",d:"해열 후 24시간 이상",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:1,n:"디프테리아",a:[],ds:"항생제 시작 후 최소 1일",d:"항생제 치료 후 24시간 이상",doc:"진료확인서 또는 의사소견서",note:""},
+  {g:1,n:"중증급성호흡기증후군(SARS)",a:["사스"],ds:"전염성 없음이 확인될 때까지",d:"치료가 종결되고 더 이상 전염성이 없다고 판명될 때까지",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"중동호흡기증후군(MERS)",a:["메르스"],ds:"모든 증상이 사라질 때까지",d:"모든 증상이 소실될 때까지",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"동물인플루엔자 인체감염증",a:["조류독감","조류인플루엔자"],ds:"모든 증상이 사라질 때까지",d:"모든 증상이 소실될 때까지",mk:1,doc:"방역당국 확인서",note:""},
+  {g:1,n:"신종인플루엔자",a:["신종플루"],ds:"열이 내린 뒤 최소 1일",d:"해열 후 24시간 이상",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:1,n:"디프테리아",a:[],ds:"치료 시작 후 14일",d:"14일간의 치료가 끝날 때까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
   {g:1,n:"니파바이러스감염증",a:[],ds:"방역당국 지시에 따름",d:"격리 해제 시까지 (방역당국 지시)",doc:"방역당국 확인서",note:"2026.1.1. 추가 지정"},
   /* 2급 (21종) */
-  {g:2,n:"결핵",a:["폐결핵","TB"],ds:"의사소견서 기재 기간",d:"전염성 소실 시까지 (의사소견 기준)",doc:"진료확인서 또는 의사소견서",prev:"BCG 접종 여부를 확인하세요",note:""},
-  {g:2,n:"수두",a:["물집","수포","chickenpox"],ds:"통상 7일 내외 (소견서 기준 우선)",d:"모든 수포에 딱지가 생길 때까지",doc:"진료확인서 또는 의사소견서",prev:"수두 예방접종 2회 완료 여부를 확인하세요",note:"학교 내 유행 잦음"},
-  {g:2,n:"홍역",a:["measles"],ds:"발진 발생일로부터 5일",d:"발진 후 5일까지",doc:"진료확인서 또는 의사소견서",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
-  {g:2,n:"콜레라",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"장티푸스",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"파라티푸스",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"세균성이질",a:["이질"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"장출혈성대장균감염증",a:["O157"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"A형간염",a:[],ds:"황달 발생일로부터 7일",d:"황달 발생 후 7일까지",doc:"진료확인서 또는 의사소견서",prev:"A형간염 예방접종을 확인하세요",note:""},
-  {g:2,n:"백일해",a:[],ds:"항생제 시작 후 5일",d:"항생제 치료 후 5일까지",doc:"진료확인서 또는 의사소견서",prev:"DTaP 백신 접종 일정을 확인하세요",note:"영유아 위험도 높음"},
-  {g:2,n:"유행성이하선염(볼거리)",a:["볼거리","이하선염","침샘","mumps"],ds:"부어오름 시작 후 5일",d:"이하선 종창 후 5일까지",doc:"진료확인서 또는 의사소견서",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
-  {g:2,n:"풍진",a:["rubella"],ds:"발진 발생일로부터 7일",d:"발진 후 7일까지",doc:"진료확인서 또는 의사소견서",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
-  {g:2,n:"폴리오",a:["소아마비"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"수막구균 감염증",a:["뇌수막염","수막염"],ds:"항생제 시작 후 1일",d:"항생제 치료 후 24시간까지",doc:"진료확인서 또는 의사소견서",prev:"집단생활 시 개인위생을 철저히 하세요",note:""},
-  {g:2,n:"b형헤모필루스인플루엔자",a:["Hib"],ds:"항생제 시작 후 1일",d:"항생제 치료 후 24시간까지",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"폐렴구균 감염증",a:["폐렴"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",prev:"폐렴구균 백신 접종을 확인하세요",note:""},
-  {g:2,n:"한센병",a:["나병"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"성홍열",a:["성홍","scarlet fever"],ds:"항생제 시작 후 1일",d:"항생제 치료 후 24시간까지",doc:"진료확인서 또는 의사소견서",prev:"기침 예절을 지키고 손 씻기를 철저히 하세요",note:"학교 내 유행 잦음"},
-  {g:2,n:"반코마이신내성황색포도알균(VRSA)감염증",a:["VRSA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"카바페넴내성장내세균목(CRE)감염증",a:["CRE"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:2,n:"E형간염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
+  {g:2,n:"결핵",a:["폐결핵","TB"],ds:"약물 치료 시작 후 2주",d:"약물 치료 시작 후 2주까지 (전염성 소실을 확인한 의사 소견에 따라 등교 재개)",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"BCG 접종 여부를 확인하세요",note:""},
+  {g:2,n:"수두",a:["물집","수포","chickenpox"],ds:"발진 후 최소 5일",d:"모든 물집에 딱지(가피)가 생길 때까지 (발진 발생 후 최소 5일간)",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"수두 예방접종 2회 완료 여부를 확인하세요",note:"학교 내 유행 잦음"},
+  {g:2,n:"홍역",a:["measles"],ds:"발진 발생일로부터 5일",d:"발진이 나타난 후 5일까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
+  {g:2,n:"콜레라",a:[],ds:"대변검사 2회 음성까지",d:"항생제 치료 종료 48시간 후부터 24시간 간격으로 2회 대변검사가 음성일 때까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"장티푸스",a:[],ds:"대변검사 3회 음성까지",d:"항생제 치료 종료 48시간 후부터 24시간 간격으로 3회 대변검사가 음성일 때까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"파라티푸스",a:[],ds:"대변검사 3회 음성까지",d:"항생제 치료 종료 48시간 후부터 24시간 간격으로 3회 대변검사가 음성일 때까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"세균성이질",a:["이질"],ds:"대변검사 2회 음성까지",d:"항생제 치료 종료 48시간 후부터 24시간 간격으로 2회 대변검사가 음성일 때까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"장출혈성대장균감염증",a:["O157"],ds:"대변검사 2회 음성까지",d:"항생제 치료 종료 48시간 후부터 24시간 간격으로 2회 대변검사가 음성일 때까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"A형간염",a:[],ds:"황달 발생일로부터 7일",d:"황달 증상 이후 7일간 (황달이 없으면 입원일로부터 7일간)",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"A형간염 예방접종을 확인하세요",note:""},
+  {g:2,n:"백일해",a:[],ds:"항생제 시작 후 5일",d:"항생제 투여 후 5일까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"DTaP 백신 접종 일정을 확인하세요",note:"영유아 위험도 높음"},
+  {g:2,n:"유행성이하선염(볼거리)",a:["볼거리","이하선염","침샘","mumps"],ds:"부어오름 시작 후 5일",d:"증상 발생 후 5일까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
+  {g:2,n:"풍진",a:["rubella"],ds:"발진 발생일로부터 7일",d:"발진이 나타난 후 7일까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"MMR 백신 2회 접종을 확인하세요",note:""},
+  {g:2,n:"폴리오",a:["소아마비"],ds:"대변검사 2회 연속 음성까지",d:"입원 후 매주 채취한 대변 검체의 바이러스 분리·배양검사가 2회 연속 음성일 때까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"수막구균 감염증",a:["뇌수막염","수막염"],ds:"항생제 시작 후 1일",d:"항생제 치료 시작 후 24시간까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"집단생활 시 개인위생을 철저히 하세요",note:""},
+  {g:2,n:"b형헤모필루스인플루엔자",a:["Hib"],ds:"항생제 시작 후 1일",d:"항생제 치료 시작 후 24시간까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"폐렴구균 감염증",a:["폐렴"],ds:"모든 증상이 사라질 때까지",d:"모든 증상이 소실될 때까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"폐렴구균 백신 접종을 확인하세요",note:""},
+  {g:2,n:"한센병",a:["나병"],ds:"치료 시작 후 3개월",d:"치료 시작 후 3개월까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"성홍열",a:["성홍","scarlet fever"],ds:"항생제 시작 후 1일",d:"항생제 치료 시작 후 24시간까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"기침 예절을 지키고 손 씻기를 철저히 하세요",note:"학교 내 유행 잦음"},
+  {g:2,n:"반코마이신내성황색포도알균(VRSA)감염증",a:["VRSA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"카바페넴내성장내세균목(CRE)감염증",a:["CRE"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:2,n:"E형간염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
   /* 3급 (28종) */
-  {g:3,n:"파상풍",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"B형간염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"일본뇌염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",prev:"일본뇌염 예방접종을 확인하세요",note:""},
-  {g:3,n:"C형간염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"말라리아",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"레지오넬라증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"비브리오패혈증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"발진티푸스",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"발진열",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"쯔쯔가무시증",a:["쯔쯔가무시","털진드기"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"렙토스피라증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"브루셀라증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"공수병",a:["광견병"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"신증후군출혈열",a:["유행성출혈열","한탄바이러스"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"후천성면역결핍증(AIDS)",a:["에이즈","HIV"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"크로이츠펠트-야콥병(CJD)",a:["광우병"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"황열",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"뎅기열",a:["뎅기"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"큐열",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"웨스트나일열",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"라임병",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"진드기매개뇌염",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"유비저",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"치쿤구니야열",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"중증열성혈소판감소증후군(SFTS)",a:["SFTS"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"지카바이러스감염증",a:["지카"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"매독",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
-  {g:3,n:"임질",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서 또는 의사소견서",note:""},
+  {g:3,n:"파상풍",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"B형간염",a:[],ds:"등교 중지 대상 아님",d:"일상생활에서는 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"일본뇌염",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",prev:"일본뇌염 예방접종을 확인하세요",note:""},
+  {g:3,n:"C형간염",a:[],ds:"등교 중지 대상 아님",d:"일상생활에서는 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"말라리아",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"레지오넬라증",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"비브리오패혈증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:3,n:"발진티푸스",a:[],ds:"이를 제거할 때까지",d:"몸이 또는 머릿니를 제거할 때까지",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:3,n:"발진열",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"쯔쯔가무시증",a:["쯔쯔가무시","털진드기"],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"렙토스피라증",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"브루셀라증",a:[],ds:"등교 중지 대상 아님",d:"성접촉을 제외한 일상생활에서는 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"공수병",a:["광견병"],ds:"앓는 기간 내내",d:"이환기간 내내",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:3,n:"신증후군출혈열",a:["유행성출혈열","한탄바이러스"],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:1,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"후천성면역결핍증(AIDS)",a:["에이즈","HIV"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:3,n:"크로이츠펠트-야콥병(CJD)",a:["광우병"],ds:"등교 중지 대상 아님",d:"사람 사이의 전파가 매우 드물어 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"황열",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"뎅기열",a:["뎅기"],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"큐열",a:[],ds:"등교 중지 대상 아님",d:"성접촉을 제외한 일상생활에서는 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"웨스트나일열",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"라임병",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"진드기매개뇌염",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"유비저",a:[],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"치쿤구니야열",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:3,n:"중증열성혈소판감소증후군(SFTS)",a:["SFTS"],ds:"등교 중지 대상 아님",d:"사람 사이에 전파되지 않아 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:3,n:"지카바이러스감염증",a:["지카"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:3,n:"매독",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:3,n:"임질",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
   /* 4급 (23종) */
-  {g:4,n:"인플루엔자(독감)",a:["독감","플루","flu","몸살"],ds:"열이 내린 뒤 2일",d:"해열 후 48시간 (학교 등 집단시설)",doc:"진료확인서 또는 의사소견서",prev:"매년 가을 독감 예방접종을 받으세요",note:"학교 내 유행 잦음"},
-  {g:4,n:"회충증",a:["회충"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"편충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"요충증",a:["요충","항문가려움"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"간흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"폐흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"장흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"수족구병",a:["수족구","손발입"],ds:"통상 5~7일 (소견서 기준 우선)",d:"의사소견서에 기재된 기간 (통상 수포 소실까지)",doc:"의사소견서 (격리 필요 명시)",prev:"손 씻기를 철저히 하고 장난감을 자주 소독하세요",note:"학교 내 유행 잦음"},
-  {g:4,n:"클라미디아 감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"연성하감",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"성기단순포진",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"첨규콘딜롬",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"반코마이신내성장알균(VRE)감염증",a:["VRE"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"메티실린내성황색포도알균(MRSA)감염증",a:["MRSA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"다제내성녹농균(MRPA)감염증",a:["MRPA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"다제내성아시네토박터바우마니균(MRAB)감염증",a:["MRAB"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"장관감염증(노로바이러스 등)",a:["장염","노로바이러스","노로","구토","설사","식중독"],ds:"설사·구토 멈춘 뒤 2일",d:"증상 소실 후 48시간",doc:"진료확인서 또는 의사소견서",prev:"음식을 충분히 익혀 먹고 손 씻기를 철저히 하세요",note:"노로바이러스 포함"},
-  {g:4,n:"급성호흡기감염증",a:["호흡기감염","기침","콧물"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",prev:"기침 예절과 마스크 착용을 지도하세요",note:""},
-  {g:4,n:"해외유입기생충감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"엔테로바이러스감염증",a:["엔테로"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",prev:"손 씻기를 철저히 하세요",note:""},
-  {g:4,n:"사람유두종바이러스 감염증",a:["HPV"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:""},
-  {g:4,n:"Candida auris 감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"의사소견서",note:"2026.1.1. 신규 지정"},
-  {g:4,n:"유행성각결막염",a:["눈병","눈꼽","아폴로눈병","결막염"],ds:"통상 1~2주 (소견서 기준 우선)",d:"의사소견서에 기재된 기간 (통상 2주 내외)",doc:"의사소견서",prev:"손으로 눈을 만지지 않고 수건을 따로 쓰세요",note:"학교 내 유행 잦음"},
+  {g:4,n:"코로나바이러스감염증-19",a:["코로나","코로나19","COVID","covid","코로나바이러스"],ds:"확진 후 최소 7일",d:"통상 최소 7일까지 등교 중지 (방역당국 지침에 따라 조정될 수 있음)",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"실내 환기와 손 씻기, 기침 예절을 지도하세요",note:"방역당국 지침이 바뀌면 그 지침을 우선 적용합니다"},
+  {g:4,n:"인플루엔자(독감)",a:["독감","플루","flu","몸살"],ds:"열이 내린 뒤 1일",d:"해열제 없이 정상 체온 회복 후 24시간 (해열제를 먹었다면 마지막 복용 후 48시간까지 경과 관찰)",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"매년 가을 독감 예방접종을 받으세요",note:"학교 내 유행 잦음"},
+  {g:4,n:"회충증",a:["회충"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"편충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"요충증",a:["요충","항문가려움"],ds:"등교 중지 대상 아님",d:"치료로 충체를 없애기 전까지 전염될 수 있으나, 매뉴얼상 등교 중지는 하지 않습니다",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",note:""},
+  {g:4,n:"간흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"폐흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"장흡충증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"수족구병",a:["수족구","손발입"],ds:"수포 발생 후 6일",d:"수포 발생 후 6일간 또는 딱지(가피)가 생길 때까지",mk:1,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"손 씻기를 철저히 하고 장난감을 자주 소독하세요",note:"학교 내 유행 잦음"},
+  {g:4,n:"클라미디아 감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"연성하감",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"성기단순포진",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"첨규콘딜롬",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"반코마이신내성장알균(VRE)감염증",a:["VRE"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"메티실린내성황색포도알균(MRSA)감염증",a:["MRSA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"다제내성녹농균(MRPA)감염증",a:["MRPA"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"다제내성아시네토박터바우마니균(MRAB)감염증",a:["MRAB"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"장관감염증(노로바이러스 등)",a:["장염","노로바이러스","노로","구토","설사","식중독"],ds:"설사·구토 멈춘 뒤 2일",d:"증상 소실 후 48시간",mk:0,doc:"진료확인서·의사소견서·진단서 중 1부",prev:"음식을 충분히 익혀 먹고 손 씻기를 철저히 하세요",note:"노로바이러스 포함"},
+  {g:4,n:"급성호흡기감염증",a:["호흡기감염","기침","콧물"],ds:"등교 중지 대상 아님",d:"감기군 감염병으로 매뉴얼상 등교 중지를 하지 않습니다",nq:1,mk:1,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",prev:"기침 예절과 마스크 착용을 지도하세요",note:""},
+  {g:4,n:"해외유입기생충감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"엔테로바이러스감염증",a:["엔테로"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",prev:"손 씻기를 철저히 하세요",note:""},
+  {g:4,n:"사람유두종바이러스 감염증",a:["HPV"],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:""},
+  {g:4,n:"Candida auris 감염증",a:[],ds:"의사소견서 기재 기간",d:"의사소견서에 기재된 기간",doc:"진료확인서·의사소견서·진단서 중 1부",note:"2026.1.1. 신규 지정"},
+  {g:4,n:"급성출혈성결막염",a:["아폴로눈병","출혈성결막염","눈병"],ds:"등교 중지 대상 아님",d:"초·중·고 학생은 격리 없이 개인위생수칙을 철저히 지킬 것을 권장합니다 (어린이집·유치원은 격리 권장)",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",prev:"손으로 눈을 만지지 않고 수건을 따로 쓰세요",note:""},
+  {g:4,n:"유행성각결막염",a:["눈병","눈꼽","아폴로눈병","결막염"],ds:"등교 중지 대상 아님",d:"초·중·고 학생은 격리 없이 개인위생수칙을 철저히 지킬 것을 권장합니다 (어린이집·유치원은 격리 권장)",nq:1,mk:0,doc:"등교중지 서류 불필요 (결석 처리는 담임 선생님과 상의)",prev:"손으로 눈을 만지지 않고 수건을 따로 쓰세요",note:"학교 내 유행 잦음"},
 ];
 /* TODOS not found */
 /* 월별 주의 감염병 — 질병관리청 계절별 발생 특성 기준 */
@@ -777,6 +791,8 @@ function showResult(type,el,push=true){
         <div class="section-collapsible default-open" id="chk-${type}"><div class="checklist-box">${checks}<div class="check-feedback" id="chk-fb-${type}"></div></div></div>
         <div class="section-toggle" onclick="toggleSection('todo-${type}','arrow-todo-${type}')"><span class="section-toggle-title">✅ 담임 선생님께 알리기</span><span class="section-toggle-arrow" id="arrow-todo-${type}">▼</span></div>
         <div class="section-collapsible" id="todo-${type}"><div style="padding-bottom:12px">${steps}</div></div>
+        <div class="section-toggle" onclick="toggleSection('home-${type}','arrow-home-${type}')"><span class="section-toggle-title">🏠 집에서 지낼 때</span><span class="section-toggle-arrow" id="arrow-home-${type}">▼</span></div>
+        <div class="section-collapsible" id="home-${type}"><div class="home-rules" id="home-rules-${type}">${homeRulesHtml()}</div></div>
         <div class="msg-box">
           <div class="msg-header">
             <span class="msg-label">✉️ 담임 선생님께 보낼 문자</span>
@@ -804,7 +820,7 @@ function toggleSection(id,arrowId){
 function inlineSearch(){
   const q=(document.getElementById('inline-search-input').value||'').trim();
   const res=document.getElementById('inline-result');
-  currentMsgDisease=null;
+  currentMsgDisease=null;refreshHomeRules();
   if(!q){res.innerHTML='';return;}
   const list=DISEASES.filter(d=>d.n.includes(q)||d.a.some(a=>a.includes(q)||q.includes(a))).slice(0,5);
   if(!list.length){res.innerHTML=noMatchHtml(q,'showInlineDetail');return;}
@@ -814,11 +830,56 @@ function showInlineDetail(escapedName){
   const d=DISEASES.find(x=>esc(x.n)===escapedName);
   if(!d)return;
   currentMsgDisease=d;saveRecent(d.n);
-  fillMsgText('A');
+  fillMsgText('A');refreshHomeRules();
   document.getElementById('inline-search-input').value=d.n;
   const _e=endDateText(d);
   const _eHtml=_e?`<div class="hero-return" style="margin:10px 0 0">🏫 오늘 진단 기준 <strong>${_e}</strong>부터 등교 가능<div class="hero-return-note">소견서 기간이 다르면 그 기간을 따릅니다</div></div>`:'';
   document.getElementById('inline-result').innerHTML=`<div class="inline-detail"><div class="inline-detail-name">${d.n} <span class="grade-tag g${d.g}">${d.g}급</span></div><div class="inline-days">${d.ds}</div><div class="inline-days-sub">${d.d}</div>${_eHtml}<div class="inline-doc">📄 필요 서류: ${d.doc}${d.note?'<br>⚠️ '+d.note:''}</div></div>`;
+}
+/* ━━ 등교 중지 기간 가정 내 생활수칙 ━━
+   출처: 학교 감염병 예방·위기대응 매뉴얼 제3차 개정판
+   병명이 선택되면 매뉴얼 표의 '마스크 착용' 값(mk)에 따라 두 번째 줄이 달라진다. */
+function homeRulesHtml(){
+  const d=currentMsgDisease;
+  let when='';
+  if(d && d.nq){
+    when='<div class="home-when">🏫 등교 중지 대상은 아닙니다. 다만 증상이 있는 동안에는 집에서 아래 수칙을 지켜 주세요.</div>';
+  } else if(d){
+    const e=endDateText(d);
+    when=e
+      ? '<div class="home-when">🏫 <strong>'+e+'</strong>부터 등교 가능합니다. 그때까지 집에서는 아래와 같이 지내 주세요.<br><span style="opacity:.8">소견서 기간이 다르면 그 기간을 따릅니다.</span></div>'
+      : '<div class="home-when">🏫 등교를 다시 시작할 때까지 집에서는 아래와 같이 지내 주세요.</div>';
+  }
+  let contact;
+  if(d && d.mk===1){
+    contact='다른 사람과 접촉하지 않으며, 불가피한 경우 서로 <strong>마스크를 쓰고 2m 이상</strong> 거리를 두세요.'
+      +'<span class="home-tag on">마스크 필요</span>';
+  } else if(d && d.mk===0){
+    contact='다른 사람과 접촉을 줄이고 2m 이상 거리를 두세요. 매뉴얼상 마스크 착용 대상은 아니지만 <strong>손 씻기</strong>가 특히 중요합니다.'
+      +'<span class="home-tag off">손 위생 중심</span>';
+  } else {
+    contact='다른 사람과 접촉하지 않으며, 불가피한 경우 서로 마스크를 쓰고 2m 이상 거리를 두세요.';
+  }
+  const rows=[
+    ['🪟','환기가 잘되는 독립된 공간에서 혼자 생활하고, 창문을 열어 자주 환기하세요.',0],
+    ['😷',contact,1],
+    ['🍚','식사는 혼자 하고, 화장실·세면대가 두 개 이상이면 하나를 혼자 쓰게 하세요.',0],
+    ['🧴','화장실·세면대를 같이 쓴다면 다른 사람이 쓰기 전에 소독하세요.',0],
+    ['🧺','수건·식기류·휴대전화는 따로 쓰고, 옷과 이불도 별도로 쓰고 세탁하세요.',0],
+    ['🧼','30초 이상 손 씻기, 기침할 때 휴지로 입과 코 막기 등 개인위생을 철저히 하세요.',0],
+    ['🚫','학원과 다중이용시설 등 사람이 많은 곳 방문은 자제해 주세요.',0]
+  ];
+  return when
+    + '<div class="home-lead">준수사항 — 감염병에 따라 조금씩 달라질 수 있습니다.</div>'
+    + rows.map(function(r){
+        return '<div class="home-item'+(r[2]?' hl':'')+'"><span class="home-ico">'+r[0]+'</span><span>'+r[1]+'</span></div>';
+      }).join('')
+    + '<div class="home-src">※ 교육부 「학교 감염병 예방·위기대응 매뉴얼 제3차 개정판」 기준입니다. 의사나 방역당국이 별도 안내를 한 경우에는 그 안내를 따르세요.</div>';
+}
+/* 병명을 새로 고르면 열려 있는 생활수칙도 함께 갱신 */
+function refreshHomeRules(){
+  const box=document.getElementById('home-rules-A');
+  if(box) box.innerHTML=homeRulesHtml();
 }
 function toggleCheck(item,boxId){
   const cb=item.querySelector('.check-box');
@@ -992,8 +1053,8 @@ function showDiseaseDetail(escapedName,push=true){
   if(push) pushView({tab:'search', view:'detail', disease:d.n});
   const gradeDesc=['','생물테러·치명 감염병 (즉시 신고·음압격리)','24시간 이내 격리 필요','24시간 이내 신고','표본감시 감염병'];
   const alias=d.a.length?`<div class="info-row"><span class="info-lbl">다른 이름</span><span class="info-val">${d.a.join(', ')}</span></div>`:'';
-  document.getElementById('dis-detail').innerHTML=`<div class="dis-detail"><div class="dis-detail-head"><div class="dis-detail-name">${d.n}</div><span class="grade-tag g${d.g}">${d.g}급</span></div><div class="result-body"><div class="days-highlight"><div class="days-label">등교중지 기간</div><div class="days-value">${d.ds}</div><div class="days-sub">${d.d}</div></div>${endDateText(d)?`<div class="hero-return">🏫 오늘 진단 기준 <strong>${endDateText(d)}</strong>부터 등교 가능<div class="hero-return-note">소견서 기간이 다르면 그 기간을 따릅니다</div></div>`:''}<div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val ok">✅ 가능 (법정 감염병)</span></div><div class="info-row"><span class="info-lbl">급 특성</span><span class="info-val">${gradeDesc[d.g]}</span></div>${alias}<div class="info-row"><span class="info-lbl">필요 서류</span><span class="info-val">${d.doc}</span></div>${d.note?`<div class="info-row"><span class="info-lbl">참고</span><span class="info-val warn">⚠️ ${d.note}</span></div>`:''}
-        ${d.prev?`<div class="info-row"><span class="info-lbl">예방 방법</span><span class="info-val">💡 ${d.prev}</span></div>`:''}<div class="notice-box amber">📋 소견서에 반드시 <strong>진단명(${d.n})</strong>과 <strong>등교중지 기간</strong>이 함께 기재되어야 출석 인정이 됩니다.</div></div></div>`;
+  document.getElementById('dis-detail').innerHTML=`<div class="dis-detail"><div class="dis-detail-head"><div class="dis-detail-name">${d.n}</div><span class="grade-tag g${d.g}">${d.g}급</span></div><div class="result-body"><div class="days-highlight"><div class="days-label">등교중지 기간</div><div class="days-value">${d.ds}</div><div class="days-sub">${d.d}</div></div>${endDateText(d)?`<div class="hero-return">🏫 오늘 진단 기준 <strong>${endDateText(d)}</strong>부터 등교 가능<div class="hero-return-note">소견서 기간이 다르면 그 기간을 따릅니다</div></div>`:''}${d.nq?`<div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val warn">⚠️ 등교중지 대상이 아닙니다</span></div>`:`<div class="info-row"><span class="info-lbl">출석 인정</span><span class="info-val ok">✅ 가능 (법정 감염병)</span></div>`}<div class="info-row"><span class="info-lbl">급 특성</span><span class="info-val">${gradeDesc[d.g]}</span></div>${alias}<div class="info-row"><span class="info-lbl">필요 서류</span><span class="info-val">${d.doc}</span></div>${d.note?`<div class="info-row"><span class="info-lbl">참고</span><span class="info-val warn">⚠️ ${d.note}</span></div>`:''}
+        ${d.prev?`<div class="info-row"><span class="info-lbl">예방 방법</span><span class="info-val">💡 ${d.prev}</span></div>`:''}${d.nq?`<div class="notice-box blue">📌 매뉴얼상 등교 중지를 하지 않는 감염병입니다. 다만 의사가 등교중지가 필요하다는 소견을 냈거나 학교의 장이 등교 중지를 명한 경우에는 그에 따르며, 그 기간은 출석으로 인정됩니다.</div>`:`<div class="notice-box amber">📋 소견서에 반드시 <strong>진단명(${d.n})</strong>과 <strong>등교중지 기간</strong>이 함께 기재되어야 출석 인정이 됩니다.</div>`}</div></div>`;
   requestAnimationFrame(function(){ scrollToEl(document.getElementById('dis-detail')); });
 }
 
